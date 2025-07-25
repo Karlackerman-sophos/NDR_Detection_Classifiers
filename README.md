@@ -78,3 +78,4 @@ LIMIT 50;
 We would add a cpp file to run the detections where they pull necessary data from the metadata and execute the query on the specified schedule
 
 The intent is to allow us to publish new detections without the need for a software update and to support silent(monitor mode) where the query runs but does not create a detection that the customer sees in central. I think this requires us to set the monitor_mode field in the datalake when the results are sent to central. We should check how MDR_ops publishes and creates new SIGMA rules for detections.
+
