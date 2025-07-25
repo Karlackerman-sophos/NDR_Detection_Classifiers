@@ -1,0 +1,13 @@
+{
+  "id": "ip_protocol_scan",
+  "name": "Internal Host Recon - IP Protocol Scan",
+  "description": "Detects an internal source IP attempting to discover which IP protocols (e.g., TCP, UDP, ICMP, IGMP) are supported by target hosts by sending probes with many different IP protocol numbers.",
+  "enabled": true,
+  "frequency_seconds": 3600,
+  "monitor_mode": 1,
+  "execution_device": "NDR_Sensor",
+  "min_ndr_version": "1.10.1-3063",
+  "mitre_attack_mapping": "T1046",
+  "severity_score_default": 4,
+  "apply_global_ip_exclusions": true
+}
