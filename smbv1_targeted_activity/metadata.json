@@ -1,0 +1,13 @@
+{
+  "id": "smbv1_targeted_activity",
+  "name": "Internal Host Recon/Lateral Movement - SMBv1 Scan",
+  "description": "Detects attempts from an internal source IP to connect to or scan for SMBv1 services. SMBv1 is a deprecated and highly vulnerable protocol, and any active use from a non-authorized host is a critical security concern, often indicative of an adversary attempting lateral movement or exploitation (e.g., WannaCry, NotPetya).",
+  "enabled": true,
+  "frequency_seconds": 3600,
+  "monitor_mode": 1,
+  "execution_device": "NDR_Sensor",
+  "min_ndr_version": "1.10.1-3063",
+  "mitre_attack_mapping": "T1210",
+  "severity_score_default": 5,
+  "apply_global_ip_exclusions": true
+}
