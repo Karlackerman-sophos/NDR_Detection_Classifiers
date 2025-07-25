@@ -20,7 +20,7 @@ SELECT
     count() AS Total_Protocol_Attempts,
     min(Timestamp) AS First_Attempt,
     max(Timestamp) AS Last_Attempt,
-    format('Src {} made {} attempts to {} using sensitive protocol {} (Sub: {}). ICS/management reconnaissance or compromise suspected.', SrcIp, toString(Total_Protocol_Attempts), DestIp, MasterProtocol, SubProtocol) AS description, 
+    format('Src {} made {} attempts to {} using sensitive protocol {} (Sub: {}). ICS/management reconnaissance or compromise suspected.', SrcIp, toString(Total_Protocol_Attempts), DestIp, MasterProtocol, SubProtocol) AS description,
     'T1046' AS mitre_mapping,
     5 AS severity_score,
     arrayStringConcat(arraySlice(arraySort(groupUniqArray(DestIp || ':' || toString(DestPort) || ':' || MasterProtocol || ':' || SubProtocol)), 1, 10), ', ') AS Sample_Dest_IP_Ports_List
@@ -35,6 +35,7 @@ WHERE
     )
     AND MasterProtocol != 'Unknown'
     AND SubProtocol != 'Unknown'
+    AND SrcIp NOT IN ({excluded_ips_list}) -- Placeholder for global exclusion list (SYSLOG_IP, Management_IP)
 GROUP BY
     SrcIp, DestIp, MasterProtocol, SubProtocol
 HAVING
