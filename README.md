@@ -4,26 +4,17 @@ A collection of detection queries and configuration data for use with Sophos NDR
 I would like to add the ability for the NDR Sensor to run DDE detections from a git_repo so we do not have to create a cpp file for each new detection we add.
 
 The repo would be structured similar to this:
+<code> 
 ── detection-rules/                 <-- Base path for rules (configured in GIT_RULES_PATH_VAR)
-
 │   ├── networkScan/                 <-- Directory named after the detection ID
-
 │   │   ├── metadata.json            <-- Metadata for networkScan
-
 │   │   └── query.sql                <-- The full SQL query for networkScan
-
 │   ├── exfiltration/                <-- Directory named after the detection ID
-
 │   │   ├── metadata.json            <-- Metadata for exfiltration
-
 │   │   └── query.sql                <-- The full SQL query for exfiltration
-
 │   ├── anomalous_tcp_scan/          <-- New directory for Anomalous TCP Flag Scan
-
 │   │   ├── metadata.json
-
 │   │   └── query.sql
-
 ├── README.md
 
 We would add a cpp file to run the detections where they pull necessary data from the metadata and execute the query on the specified schedule
