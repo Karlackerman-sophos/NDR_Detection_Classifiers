@@ -33,6 +33,7 @@ WHERE
     AND MasterProtocol IN ('LLMNR', 'MDNS', 'SSDP', 'WSD', 'NATPMP', 'SLP')
     AND DestIp IN ('224.0.0.251', '239.255.255.250', '224.0.0.252')
     AND SubProtocol != 'Unknown'
+    AND SrcIp NOT IN ({excluded_ips_list}) -- Placeholder for global exclusion list (SYSLOG_IP, Management_IP)
 GROUP BY
     SrcIp, MasterProtocol, SubProtocol
 HAVING
