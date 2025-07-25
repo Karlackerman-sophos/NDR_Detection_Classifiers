@@ -1,0 +1,13 @@
+{
+  "id": "port_sweep",
+  "name": "Internal Host Recon - Target Port Sweep",
+  "description": "Identifies an internal source IP performing a stealthy SYN scan against a high number of unique ports on a single destination IP. This suggests targeted reconnaissance to identify open services and potential vulnerabilities on a specific host.",
+  "enabled": true,
+  "frequency_seconds": 3600,
+  "monitor_mode": 1,
+  "execution_device": "NDR_Sensor",
+  "min_ndr_version": "1.10.1-3063",
+  "mitre_attack_mapping": "T1046",
+  "severity_score_default": 4,
+  "apply_global_ip_exclusions": true
+}
