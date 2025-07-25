@@ -1,0 +1,13 @@
+{
+  "id": "established_smbv1",
+  "name": "Internal Host Activity - Established SMBv1 Connection",
+  "description": "Detects actual established TCP connections utilizing the highly vulnerable SMBv1 protocol. This is a critical alert, as a confirmed connection to an SMBv1 service implies successful interaction and is a strong indicator of active malicious activity or a severe policy violation.",
+  "enabled": true,
+  "frequency_seconds": 3600,
+  "monitor_mode": 1,
+  "execution_device": "NDR_Sensor",
+  "min_ndr_version": "1.10.1-3063",
+  "mitre_attack_mapping": "T1210",
+  "severity_score_default": 5,
+  "apply_global_ip_exclusions": true
+}
