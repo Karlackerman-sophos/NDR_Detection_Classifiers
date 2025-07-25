@@ -29,6 +29,7 @@ WHERE
     AND ClientToServerPacketCount = 1
     AND ServerToClientPacketCount <= 1
     AND ClientToServerDuration < 500
+    AND SrcIp NOT IN ({excluded_ips_list}) -- Placeholder for global exclusion list (SYSLOG_IP, Management_IP)
 GROUP BY
     SrcIp, DestIp
 HAVING
