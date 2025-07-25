@@ -32,6 +32,7 @@ WHERE
     AND ClientToServerTcpFlags = 2
     AND (bitAnd(ServerToClientTcpFlags, 18) = 18 OR bitAnd(ServerToClientTcpFlags, 20) = 20 OR ServerToClientTcpFlags = 0)
     AND ClientToServerDuration < 500
+    AND SrcIp NOT IN ({excluded_ips_list})
 GROUP BY
     SrcIp
 HAVING
