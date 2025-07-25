@@ -3,4 +3,7 @@
   "id": "aggressive_scan",
   "description": "Detects an internal source IP engaging in highly aggressive and broad reconnaissance. This involves simultaneous scanning of many unique IP addresses and many unique ports using stealthy SYN probes, indicative of automated malicious activity.",
   "frequency_seconds": 3600
+  "monitor_mode": 1
+  "min_ndr_version": "1.10.1-3063"
+  "execution_device": "NDR_Sensor"
 }
