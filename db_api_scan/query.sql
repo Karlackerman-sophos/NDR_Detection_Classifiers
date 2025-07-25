@@ -35,6 +35,7 @@ WHERE
     )
     AND MasterProtocol != 'Unknown'
     AND SubProtocol != 'Unknown'
+    AND SrcIp NOT IN ({excluded_ips_list}) -- Placeholder for global exclusion list (SYSLOG_IP, Management_IP)
 GROUP BY
     SrcIp, DestIp, MasterProtocol, SubProtocol
 HAVING
