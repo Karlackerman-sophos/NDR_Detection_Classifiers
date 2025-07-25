@@ -1,5 +1,4 @@
 /*
-/*
 Name: Internal Host Recon - UDP Application Scan
 Description:
   Detects an internal source IP attempting to probe a high number of unique UDP ports on a destination,
@@ -35,6 +34,7 @@ WHERE
     AND ClientToServerDuration < 500
     AND MasterProtocol IN ('DNS', 'NTP', 'SSDP', 'DHCP', 'DHCPV6')
     AND SubProtocol != 'Unknown'
+    AND SrcIp NOT IN ({excluded_ips_list}) -- Placeholder for global exclusion list (SYSLOG_IP, Management_IP)
 GROUP BY
     SrcIp, DestIp, MasterProtocol, SubProtocol
 HAVING
