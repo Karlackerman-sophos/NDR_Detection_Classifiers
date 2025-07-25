@@ -6,6 +6,129 @@
 #include <functional>  // For std::function in dummy client callback
 #include <ctime>       // For std::time in dummy batch_id
 
+// =========================================================================
+// !!! DUMMY IMPLEMENTATIONS FOR COMPILATION ONLY !!!
+// REPLACE THESE WITH ACTUAL LIBRARY INTEGRATIONS (libgit2, ClickHouse SDK, etc.)
+// =========================================================================
+
+#ifndef PRODUCTION_BUILD // Use these dummy implementations only for testing/development without real libs
+
+// Minimal Dummy ClickHouse Client Classes
+// (As defined in previous step-through)
+class ClientOptions {
+public:
+    ClientOptions& SetHost(const std::string& host) { _host = host; return *this; }
+    ClientOptions& SetUser(const std::string& user) { _user = user; return *this; }
+    ClientOptions& SetPassword(const std::string& pass) { _pass = pass; return *this; }
+    ClientOptions& SetPort(int port) { _port = port; return *this; }
+    ClientOptions& SetDefaultDatabase(const std::string& db) { _db = db; return *this; }
+    std::string ToString() const { return "Host: " + _host + ", User: " + _user + ", Port: " + std::to_string(_port) + ", DB: " + _db; }
+private:
+    std::string _host, _user, _pass, _db;
+    int _port;
+};
+
+// Dummy Block and ColumnString for simulating ClickHouse results
+class ColumnString {
+public:
+    const char* At(size_t row) const {
+        // Return dummy data. In real use, this would access actual column data.
+        if (row == 0) return "dummy_value_row_0";
+        if (row == 1) return "dummy_value_row_1";
+        return "";
+    }
+};
+
+class Block {
+public:
+    size_t GetRowCount() const { return 1; } // Simulate one row for dummy output
+    size_t GetColumnCount() const { return 2; }
+    std::string GetColumnName(size_t index) const {
+        if (index == 0) return "report_name"; // Match a common output field
+        if (index == 1) return "SrcIp";       // Match a common output field
+        return "";
+    }
+    // Operator to mimic accessing columns. Returns a dummy ColumnString.
+    std::unique_ptr<ColumnString> operator[](size_t index) const {
+        return std::make_unique<ColumnString>();
+    }
+};
+
+class Client {
+public:
+    Client(ClientOptions options) {
+        std::cout << "Dummy ClickHouse Client created with options: " << options.ToString() << std::endl;
+    }
+    ~Client() {
+        std::cout << "Dummy ClickHouse Client destroyed." << std::endl;
+    }
+    void Select(const std::string& query, std::function<void(const Block&)> callback) {
+        std::cout << "Dummy ClickHouse Client executing query:\n" << query << std::endl;
+        Block dummyBlock;
+        callback(dummyBlock); // Call the callback with dummy data
+    }
+    void Execute(const std::string& query) {
+        std::cout << "Dummy ClickHouse Client executing DDL/DML query:\n" << query << std::endl;
+    }
+};
+
+
+// Dummy GitHelper Implementation (REPLACE WITH REAL LIBGIT2)
+namespace GitHelper {
+    bool clone_or_pull_repo(const std::string& repo_url, const std::string& branch, const std::string& local_path) {
+        std::cout << "Simulating Git: Cloning/Pulling " << repo_url << " branch " << branch << " to " << local_path << std::endl;
+        std::cout << "Creating dummy repo structure in: " << local_path << std::endl;
+
+        // List of all rule IDs to create dummy files for
+        std::vector<std::string> rule_ids = {
+            "networkScan", "exfiltration", "anomalous_tcp_scan",
+            "syn_scan", "smbv1_targeted_activity", "port_sweep",
+            "discovery_protocol_abuse", "full_connect_scan", "ip_protocol_scan",
+            "aggressive_multi_scan", "ics_mgmt_scan", "udp_app_scan",
+            "kerberos_rc4_tgs", "dns_mining_pools", "db_api_scan" // Added db_api_scan
+        };
+        std::string base_rules_path = local_path + "/detection-rules/";
+        std::filesystem::create_directories(base_rules_path);
+
+        for (const auto& id : rule_ids) {
+            std::string rule_dir = base_rules_path + id;
+            std::filesystem::create_directories(rule_dir);
+
+            // Dummy metadata.json content for all rules
+            // Match the order and fields from the latest metadata JSON structure
+            std::ofstream meta_file(rule_dir + "/metadata.json");
+            meta_file << "{\n"
+                      << "  \"id\": \"" << id << "\",\n"
+                      << "  \"name\": \"" << id << " Detection (Dummy)\",\n"
+                      << "  \"description\": \"This is a dummy description for the " << id << " rule.\",\n"
+                      << "  \"enabled\": true,\n"
+                      << "  \"frequency_seconds\": 3600,\n"
+                      << "  \"monitor_mode\": 1,\n"
+                      << "  \"execution_device\": \"NDR_Sensor\",\n"
+                      << "  \"min_ndr_version\": \"1.10.1-3063\",\n"
+                      << "  \"mitre_attack_mapping\": \"TXXX.XXX\",\n" // Generic dummy
+                      << "  \"severity_score_default\": 3,\n"         // Generic dummy
+                      << "  \"apply_global_ip_exclusions\": true\n"
+                      << "}" << std::endl;
+            meta_file.close();
+
+            // Dummy query.sql content
+            std::ofstream query_file(rule_dir + "/query.sql");
+            query_file << "SELECT '" << id << "_report' AS report_name, SrcIp FROM dragonfly.dragonflyClusterScoresJoin "
+                       << "WHERE Timestamp >= now() - toIntervalHour(1) AND SrcIp NOT IN ({excluded_ips_list}) LIMIT 1;" << std::endl;
+            query_file.close();
+        }
+        return true;
+    }
+}
+
+#endif // !PRODUCTION_BUILD
+
+// =========================================================================
+// END DUMMY IMPLEMENTATIONS
+// =========================================================================
+
+
 DetectionManager::DetectionManager(detection_configuration_t* _config)
     : config(_config), clickhouse_client(nullptr) {
     printf("DetectionManager constructed.\n");
@@ -90,8 +213,8 @@ void DetectionManager::RunAllDetections() {
             // If the rule explicitly says NOT to apply global exclusions,
             // ensure the placeholder is removed or replaced with an empty string
             // if it still exists in the SQL template.
-            // replaceAll(final_sql_query, "AND SrcIp NOT IN ({excluded_ips_list})", "");
-            replaceAll(final_sql_query, "{excluded_ips_list}", "''"); // Replace with something that doesn't break syntax
+            replaceAll(final_sql_query, "AND SrcIp NOT IN ({excluded_ips_list})", "");
+            replaceAll(final_sql_query, "{excluded_ips_list}", "''"); // Or replace with something that doesn't break syntax
         }
 
         // Apply timespan substitution if the rule template includes it
