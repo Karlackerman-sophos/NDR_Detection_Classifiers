@@ -32,11 +32,12 @@ WHERE
     AND ServerToClientPacketCount <= 1
     AND ClientToServerDuration < 500
     AND (
-           ClientToServerTcpFlags = 1
-        OR ClientToServerTcpFlags = 0
-        OR ClientToServerTcpFlags = 41
-        OR ClientToServerTcpFlags = 16
+           ClientToServerTcpFlags = 1        -- FIN
+        OR ClientToServerTcpFlags = 0        -- NULL
+        OR ClientToServerTcpFlags = 41       -- Xmas (FIN | PSH | URG)
+        OR ClientToServerTcpFlags = 16       -- ACK (pure ACK without SYN)
     )
+    AND SrcIp NOT IN ({excluded_ips_list}) -- Placeholder for global exclusion list (SYSLOG_IP, Management_IP)
 GROUP BY
     SrcIp, ClientToServerTcpFlags
 HAVING
