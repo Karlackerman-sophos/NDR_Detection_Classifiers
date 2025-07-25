@@ -38,6 +38,7 @@ WHERE
     AND bitAnd(ClientToServerTcpFlags, 16) = 16
     AND bitAnd(ServerToClientTcpFlags, 18) = 18
     AND ClientToServerDuration >= 1000
+    AND SrcIp NOT IN ({excluded_ips_list}) -- Placeholder for global exclusion list (SYSLOG_IP, Management_IP)
 GROUP BY
     SrcIp, DestIp, MasterProtocol, SubProtocol
 HAVING
