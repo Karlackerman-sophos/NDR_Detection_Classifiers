@@ -18,7 +18,7 @@ The repo would be structured similar to this:
 ├── README.md
 
 <b>Sample metadata.json</b>
-<code>
+```json
 {
   "name": "Internal Host Recon - Aggressive Multi-Target/Multi-Port Scan",
   "id": "aggressive_scan",
@@ -28,9 +28,10 @@ The repo would be structured similar to this:
   "min_ndr_version": "1.10.1-3063"
   "execution_device": "NDR_Sensor"
 }
+```
 
 <b>Sample query.sql</b>
-<code>
+```sql
 /*
 Name: Internal Host Recon - Aggressive Multi-Target/Multi-Port Scan
 Description:
@@ -74,6 +75,7 @@ HAVING
 ORDER BY
     Total_Attempts DESC
 LIMIT 50;
+```
 
 We would add a cpp file to run the detections where they pull necessary data from the metadata and execute the query on the specified schedule
 
