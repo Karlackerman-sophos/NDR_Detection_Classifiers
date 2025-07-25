@@ -1,0 +1,13 @@
+{
+  "id": "discovery_protocol_abuse",
+  "name": "Internal Host Recon - Discovery Protocol Abuse",
+  "description": "Identifies an internal source IP querying multiple unique hosts or a high volume of traffic related to typically benign discovery protocols (LLMNR, MDNS, SSDP, WSD, NATPMP, SLP). This can indicate an attacker attempting to enumerate internal hosts, services, or perform credential relay attacks.",
+  "enabled": true,
+  "frequency_seconds": 3600,
+  "monitor_mode": 1,
+  "execution_device": "NDR_Sensor",
+  "min_ndr_version": "1.10.1-3063",
+  "mitre_attack_mapping": "T1046",
+  "severity_score_default": 5,
+  "apply_global_ip_exclusions": true
+}
