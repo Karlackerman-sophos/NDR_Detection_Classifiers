@@ -1,0 +1,13 @@
+{
+  "id": "syn_scan",
+  "name": "Internal Host Recon - High Unique IP SYN Scan",
+  "description": "Detects an internal source IP performing a stealthy SYN scan against a high number of unique private IP addresses. This indicates active reconnaissance to discover live hosts, likely from a compromised system or unauthorized activity. Alerts on broad network mapping attempts.",
+  "enabled": true,
+  "frequency_seconds": 3600,
+  "monitor_mode": 1,
+  "execution_device": "NDR_Sensor",
+  "min_ndr_version": "1.10.1-3063",
+  "mitre_attack_mapping": "T1595.001",
+  "severity_score_default": 4,
+  "apply_global_ip_exclusions": true
+}
