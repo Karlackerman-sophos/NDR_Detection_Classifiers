@@ -5,15 +5,16 @@ This repository contains the C++ implementation of the Sophos NDR Dynamic Detect
 ---
 
 ## Table of Contents
-1. Purpose
-2. Architecture & Design
-3. File Structure
-4. Dependencies
-5. Building the Framework
-6. Configuration
-7. Adding and Updating Detection Rules
-8. Running the Framework
-9. Key Considerations
+1. [Purpose](#1-purpose)
+2. [Architecture & Design](#2-architecture--design)
+3. [File Structure](#3-file-structure)
+    * [3.1 C++ Source Files](#31-c-source-files)
+4. [Dependencies](#4-dependencies)
+5. [Building the Framework](#5-building-the-framework)
+6. [Configuration](#6-configuration)
+7. [Adding and Updating Detection Rules](#7-adding-and-updating-detection-rules)
+8. [Running the Framework](#8-running-the-framework)
+9. [Key Considerations](#9-key-considerations)
 
 ---
 
