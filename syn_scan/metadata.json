@@ -9,5 +9,5 @@
   "min_ndr_version": "1.10.1-3063",
   "mitre_attack_mapping": "T1595.001",
   "severity_score_default": 4,
-  "apply_global_ip_exclusions": true
+  "apply_global_ip_exclusions": false
 }
