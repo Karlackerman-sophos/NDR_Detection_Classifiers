@@ -20,13 +20,17 @@ The repo would be structured similar to this:
 <b>Sample metadata.json</b>
 ```json
 {
-  "name": "Internal Host Recon - Aggressive Multi-Target/Multi-Port Scan",
-  "id": "aggressive_scan",
-  "description": "Detects an internal source IP engaging in highly aggressive and broad reconnaissance. This involves simultaneous scanning of many unique IP addresses and many unique ports using stealthy SYN probes, indicative of automated malicious activity.",
-  "frequency_seconds": 3600
-  "monitor_mode": 1
-  "min_ndr_version": "1.10.1-3063"
-  "execution_device": "NDR_Sensor"
+  "id": "udp_app_scan",
+  "name": "Internal Host Recon - UDP Application Scan",
+  "description": "Detects an internal source IP attempting to probe a high number of unique UDP ports on a destination, specifically for known application protocols like DNS, NTP, or SSDP. This indicates targeted reconnaissance against specific UDP services.",
+  "enabled": true,
+  "frequency_seconds": 3600,
+  "monitor_mode": 1,
+  "execution_device": "NDR_Sensor",
+  "min_ndr_version": "1.10.1-3063",
+  "mitre_attack_mapping": "T1046",
+  "severity_score_default": 4,
+  "apply_global_ip_exclusions": true
 }
 ```
 
