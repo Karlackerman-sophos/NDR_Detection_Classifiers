@@ -31,9 +31,11 @@ WHERE
     AND ClientToServerTcpFlags = 2
     AND (bitAnd(ServerToClientTcpFlags, 18) = 18 OR bitAnd(ServerToClientTcpFlags, 20) = 20 OR ServerToClientTcpFlags = 0)
     AND ClientToServerDuration < 500
+    AND SrcIp NOT IN ({excluded_ips_list}) -- Placeholder for global exclusion list (SYSLOG_IP, Management_IP)
 GROUP BY
     SrcIp
 HAVING
     count(DISTINCT DestIp) > 50
 ORDER BY
-    Unique_DestIPs_Scanned DESC;
+    Unique_DestIPs_Scanned DESC
+LIMIT 50; 
