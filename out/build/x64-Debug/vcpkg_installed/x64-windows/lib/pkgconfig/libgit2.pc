@@ -1,0 +1,12 @@
+prefix=${pcfiledir}/../..
+libdir="${prefix}/lib"
+includedir="${prefix}/include"
+
+Name: libgit2
+Description: The git library, take 2
+Version: 1.9.1
+Libs: "-L${libdir}" -lgit2
+Libs.private: -lwinhttp -lrpcrt4 -lcrypt32 -lole32 -lhttp_parser -lws2_32 -lsecur32
+Requires.private: libpcre zlib
+Cflags: "-I${includedir}" 
+

@@ -1,0 +1,137 @@
+{
+  "$schema": "https://raw.githubusercontent.com/spdx/spdx-spec/v2.2.1/schemas/spdx-schema.json",
+  "spdxVersion": "SPDX-2.2",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "documentNamespace": "https://spdx.org/spdxdocs/http-parser-x64-windows-2.9.4#3-04485bdc-ae39-45aa-aff6-e739b8bf1bd0",
+  "name": "http-parser:x64-windows@2.9.4#3 bdbfb31617075be490997b8294e3e9a65e00da04e1c36360f2c32e63e2b66922",
+  "creationInfo": {
+    "creators": [
+      "Tool: vcpkg-2025-07-21-d4b65a2b83ae6c3526acd1c6f3b51aff2a884533"
+    ],
+    "created": "2025-07-26T11:43:36Z"
+  },
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "GENERATES",
+      "relatedSpdxElement": "SPDXRef-binary"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-0"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-1"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-2"
+    },
+    {
+      "spdxElementId": "SPDXRef-binary",
+      "relationshipType": "GENERATED_FROM",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-0",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-1",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-2",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-2",
+      "relationshipType": "DEPENDENCY_MANIFEST_OF",
+      "relatedSpdxElement": "SPDXRef-port"
+    }
+  ],
+  "packages": [
+    {
+      "name": "http-parser",
+      "SPDXID": "SPDXRef-port",
+      "versionInfo": "2.9.4#3",
+      "downloadLocation": "git+https://github.com/Microsoft/vcpkg#ports/http-parser",
+      "homepage": "https://github.com/nodejs/http-parser",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "description": "HTTP Parser.",
+      "comment": "This is the port (recipe) consumed by vcpkg."
+    },
+    {
+      "name": "http-parser:x64-windows",
+      "SPDXID": "SPDXRef-binary",
+      "versionInfo": "bdbfb31617075be490997b8294e3e9a65e00da04e1c36360f2c32e63e2b66922",
+      "downloadLocation": "NONE",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "comment": "This is a binary package built by vcpkg."
+    },
+    {
+      "SPDXID": "SPDXRef-resource-0",
+      "name": "nodejs/http-parser",
+      "downloadLocation": "git+https://github.com/nodejs/http-parser@2343fd6b5214b2ded2cdcf76de2bf60903bb90cd",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "checksums": [
+        {
+          "algorithm": "SHA512",
+          "checksumValue": "9fb95794d2c278c933e9bff0284befd1a8c8cf8ddda8e9929669f3134246d7fe81b54293359164d947f9278e2dd28b87d29a8ad8f523ed659d62713d782c7e46"
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "fileName": "./CMakeLists.txt",
+      "SPDXID": "SPDXRef-file-0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "130e97844411f089cbdd91dfa6d91ebff1fc6e1d9c32be52b7c9fcbdc4a2a913"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./portfile.cmake",
+      "SPDXID": "SPDXRef-file-1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e72ff731b36bb35a5c08d79e17a857685b06b3d4b4e8b957d0b401e27cc11fd1"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./vcpkg.json",
+      "SPDXID": "SPDXRef-file-2",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a22c35545204a1e4810744cc250c11455e813aa72146c1d6f7de61f7b3212c4e"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    }
+  ]
+}

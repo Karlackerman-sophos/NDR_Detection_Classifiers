@@ -1,0 +1,137 @@
+{
+  "$schema": "https://raw.githubusercontent.com/spdx/spdx-spec/v2.2.1/schemas/spdx-schema.json",
+  "spdxVersion": "SPDX-2.2",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "documentNamespace": "https://spdx.org/spdxdocs/jansson-x64-windows-2.14#1-bb63ae9c-ed42-43ff-87d5-97b06cc82c7c",
+  "name": "jansson:x64-windows@2.14#1 454e5284f9ac7bdf407bb78c8d2923a193e7dcff4688f20ff3bc998d3fae645d",
+  "creationInfo": {
+    "creators": [
+      "Tool: vcpkg-2025-07-21-d4b65a2b83ae6c3526acd1c6f3b51aff2a884533"
+    ],
+    "created": "2025-07-26T11:48:33Z"
+  },
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "GENERATES",
+      "relatedSpdxElement": "SPDXRef-binary"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-0"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-1"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-2"
+    },
+    {
+      "spdxElementId": "SPDXRef-binary",
+      "relationshipType": "GENERATED_FROM",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-0",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-1",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-2",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-2",
+      "relationshipType": "DEPENDENCY_MANIFEST_OF",
+      "relatedSpdxElement": "SPDXRef-port"
+    }
+  ],
+  "packages": [
+    {
+      "name": "jansson",
+      "SPDXID": "SPDXRef-port",
+      "versionInfo": "2.14#1",
+      "downloadLocation": "git+https://github.com/Microsoft/vcpkg#ports/jansson",
+      "homepage": "https://github.com/akheron/jansson",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "description": "Jansson is a C library for encoding, decoding and manipulating JSON data",
+      "comment": "This is the port (recipe) consumed by vcpkg."
+    },
+    {
+      "name": "jansson:x64-windows",
+      "SPDXID": "SPDXRef-binary",
+      "versionInfo": "454e5284f9ac7bdf407bb78c8d2923a193e7dcff4688f20ff3bc998d3fae645d",
+      "downloadLocation": "NONE",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "comment": "This is a binary package built by vcpkg."
+    },
+    {
+      "SPDXID": "SPDXRef-resource-0",
+      "name": "akheron/jansson",
+      "downloadLocation": "git+https://github.com/akheron/jansson@684e18c927e89615c2d501737e90018f4930d6c5",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "checksums": [
+        {
+          "algorithm": "SHA512",
+          "checksumValue": "e2cac3567bc860d10d9aa386ce370876cb21ff083a970abeb48112b6586b91cd101694a98cb05a06795fb04498e6bc2df3615fedb86635f5a998b68e5670e5b3"
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "fileName": "./fix-linker-flags.patch",
+      "SPDXID": "SPDXRef-file-0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ff88a787b4cf048654183c93839223d0083126907c4290cb2d8a80c366e15107"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./portfile.cmake",
+      "SPDXID": "SPDXRef-file-1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c125ade43b668d9890867d4b97c67ca693aae8562c623fdf2c9d6cf884b54137"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./vcpkg.json",
+      "SPDXID": "SPDXRef-file-2",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "cda0e4ac929e1ba2f32e051d8bda7493be9cebbd33b37318d56521972b045629"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    }
+  ]
+}

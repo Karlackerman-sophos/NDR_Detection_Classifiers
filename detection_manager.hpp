@@ -1,46 +1,79 @@
-#pragma once
+#ifndef DETECTION_MANAGER_HPP
+#define DETECTION_MANAGER_HPP
 
-#include "detection_common.hpp" // Includes common structs and JSON/Client placeholders
-#include <filesystem> // For std::filesystem operations (C++17)
-#include <stdexcept>  // For std::runtime_error, std::out_of_range, etc.
+#include <string>
+#include <vector>
+#include <map>
+#include <memory>
+#include <jansson.h> // For json_t
 
-// Helper for Git operations (needs libgit2 implementation)
-namespace GitHelper {
-    bool clone_or_pull_repo(const std::string& repo_url, const std::string& branch, const std::string& local_path);
-}
+// Forward-declare the ClickHouse client class
+class Client;
 
+// A simple type definition for the configuration map
+struct detection_configuration_t {
+    std::map<std::string, std::string> config_map;
+};
+
+// Struct to hold all the parsed information for a single detection rule
+struct LoadedDetectionRule {
+    std::string id;
+    std::string name;
+    std::string description;
+    bool enabled{ true };
+    int frequency_seconds{ 0 };
+    int monitor_mode{ 0 };
+    std::string execution_device;
+    std::string min_ndr_version;
+    std::string mitre_attack_mapping;
+    int severity_score_default{ 0 };
+    bool apply_global_ip_exclusions{ true };
+    std::string sql_query_template;
+    std::string rule_dir_path;
+};
+
+// Manages the lifecycle of fetching, loading, running, and reporting on detection rules.
 class DetectionManager {
 public:
+    // Constructor
     DetectionManager(detection_configuration_t* _config);
+
+    // Destructor
     ~DetectionManager();
 
-    // Initializes Git, clones repo, discovers and loads all rules, initializes DB client
+    // Initializes the manager
     bool Init();
 
-    // Executes all loaded and enabled detections
-    // In a real system, this would be called by a scheduler at appropriate times.
+    // Executes all enabled detection rules
     void RunAllDetections();
 
-    // Cleans up temporary Git repository and ClickHouse client
+    // Prints a formatted summary table of all loaded rules
+    void PrintRulesSummary();
+
+    // Cleans up resources
     bool Cleanup();
 
+    // Executes a single, specified rule
+    void RunSingleRule(const LoadedDetectionRule& rule);
+
+    // Returns a constant reference to the vector of loaded rules
+    const std::vector<LoadedDetectionRule>& GetLoadedRules() const;
+
 private:
-    detection_configuration_t* config;
-    std::unique_ptr<Client> clickhouse_client; // Single client for the manager
-    std::string temp_git_repo_path;            // Path to the local clone of the Git repo
-    std::string git_rules_base_path;           // Path within the Git repo to the rule directories (e.g., "detection-rules/")
-
-    std::vector<LoadedDetectionRule> loaded_rules; // Stores all discovered and loaded rules
-
-    // Private helper methods for internal logic
+    // Helper methods for internal logic
     bool setupGitRepository();
     bool discoverAndLoadRules();
     bool loadMetadataForRule(const std::string& metadata_json_path, LoadedDetectionRule& rule);
     std::string loadSqlQueryFile(const std::string& sql_file_path);
-
-    // Utility for string replacement
+    std::string constructExcludedIpsList(const std::string& syslog_ip, const std::string& mgmt_ip);
     void replaceAll(std::string& str, const std::string& from, const std::string& to);
 
-    // Utility to construct excluded IP list string
-    std::string constructExcludedIpsList(const std::string& syslog_ip, const std::string& mgmt_ip);
-};
+    // --- Member Variables ---
+    detection_configuration_t* config;
+    std::unique_ptr<Client> clickhouse_client;
+    std::vector<LoadedDetectionRule> loaded_rules;
+    std::string git_rules_base_path;
+    std::string temp_git_repo_path;
+}; // <-- A missing semicolon here is a very common cause for this error.
+
+#endif // DETECTION_MANAGER_HPP

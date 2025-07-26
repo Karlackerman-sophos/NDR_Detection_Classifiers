@@ -1,0 +1,48 @@
+/*
+Name: Internal Host Recon - Full-Connect Application Scan
+Description:
+  Identifies an internal source IP establishing a high number of full TCP connections to unique internal IP addresses or unique ports,
+  where an application-layer protocol is identified. This suggests a full-connect scan targeting specific services.
+MITRE ATT&CK Mapping:
+  T1595.002 - Active Scanning: Vulnerability Scanning: Very strong indicator of vulnerability scanning if specific services are targeted or many ports on the same host.
+Severity Score: 3
+Rationale:
+  Higher FP risk than stealthy scans if there are legitimate tools. Could be legitimate but needs verification.
+  If it's *not* a known scanner, it's very concerning.
+*/
+SELECT
+    'full_connect_scan' AS report_name,
+    SrcIp,
+    MasterProtocol,
+    SubProtocol,
+    count(DISTINCT DestIp) AS Unique_DestIPs_Connected,
+    count(DISTINCT DestPort) AS Unique_DestPorts_Connected,
+    count() AS Total_Connections,
+    min(Timestamp) AS First_Connection,
+    max(Timestamp) AS Last_Connection,
+    format('Src {} established {} full TCP connections to unique internal IPs and {} unique ports, often for {} ({}). Full-connect scan or data exfiltration suspected.', SrcIp, toString(count(DISTINCT DestIp)), toString(count(DISTINCT DestPort)), MasterProtocol, SubProtocol) AS description,
+    'T1595.002' AS mitre_mapping,
+    3 AS severity_score,
+    arrayStringConcat(arraySlice(arraySort(groupUniqArray(DestIp || ':' || toString(DestPort) || ':' || MasterProtocol || ':' || SubProtocol)), 1, 10), ', ') AS Sample_Dest_IP_Ports_List
+FROM
+    dragonfly.dragonflyClusterScoresJoin
+WHERE
+    DestIpCategory = 'private'
+    AND Timestamp >= now() - toIntervalHour(1)
+    AND ClientToServerPacketCount > 1
+    AND ServerToClientPacketCount > 1
+    AND bitAnd(ClientToServerTcpFlags, 16) = 16
+    AND bitAnd(ServerToClientTcpFlags, 18) = 18
+    AND ClientToServerDuration >= 1000
+    AND MasterProtocol != 'Unknown'
+    AND SubProtocol != 'Unknown'
+    AND MasterProtocol NOT IN ('ICMPV6', 'IGMP')
+    AND SrcIp NOT IN ({excluded_ips_list}) -- Placeholder for global exclusion list (SYSLOG_IP, Management_IP)
+GROUP BY
+    SrcIp, MasterProtocol, SubProtocol
+HAVING
+    count(DISTINCT DestIp) > 5
+    OR count(DISTINCT DestPort) > 5
+ORDER BY
+    Total_Connections DESC
+LIMIT 50;

@@ -1,46 +1,42 @@
-cmake_minimum_required(VERSION 3.10) # Minimum CMake version required
-
-# Name your project
-project(NDRDetectionFramework CXX)
-
-# Set the C++ standard to C++17 (or newer, if your compiler supports it and you prefer)
+# Set the minimum required version of CMake and define the C++ standard.
+cmake_minimum_required(VERSION 3.15)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Include directories for your project's headers
-# Since common.hpp and manager.hpp are in the root, just add current directory
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+# Define the project name and language.
+project(detection_manager_test CXX)
 
-# Add the executable for testing
-# The TEST_MAIN_BUILD define should be set to enable the main() function in detection_manager.cpp
-# We'll define it here so the test executable is built.
-add_definitions(-DTEST_MAIN_BUILD)
+# This is the modern vcpkg integration that should handle everything automatically,
+# but is not working correctly in your environment. We leave it here.
+find_package(Jansson REQUIRED)
+find_package(libgit2 REQUIRED)
 
-# Define your executable
-# This creates an executable target named 'detection_manager_test'
-# It explicitly lists the source files for the executable.
-add_executable(detection_manager_test
+# Add the executable target and its source files.
+add_executable(${PROJECT_NAME}
     detection_manager.cpp
 )
 
-# -----------------------------------------------------------------------------
-# Dependency Linking (PLACEHOLDERS - YOU WILL NEED TO ADJUST THESE FOR REAL LIBRARIES)
-# -----------------------------------------------------------------------------
+# --- Manual Workaround Starts Here ---
 
-# Example for Jansson (if installed via vcpkg, CMake finds it automatically)
-# If not using vcpkg, you might need: find_package(Jansson CONFIG REQUIRED)
-# Or manually link: target_link_libraries(detection_manager_test PRIVATE jansson)
+# 1. Manually tell CMake where to find header files (.h) for the compiler.
+target_include_directories(${PROJECT_NAME} PRIVATE
+    "C:/Dev/vcpkg/installed/x64-windows/include"
+)
 
-# Example for libgit2 (if installed via vcpkg, CMake finds it automatically)
-# If not using vcpkg, you might need: find_package(LibGit2 CONFIG REQUIRED)
-# Or manually link: target_link_libraries(detection_manager_test PRIVATE git2)
+# 2. Manually tell CMake where to find library files (.lib) for the linker.
+target_link_directories(${PROJECT_NAME} PRIVATE
+    "C:/Dev/vcpkg/installed/x64-windows/lib"
+)
 
-# Example for ClickHouse Client Library
-# The ClickHouse C++ client typically has its own CMake configuration.
-# You'd use find_package or add_subdirectory if it's part of your project.
-# For manual linking (if you have pre-compiled binaries):
-# target_link_libraries(detection_manager_test PRIVATE <NameOfClickHouseClientLib>)
+# --- Manual Workaround Ends Here ---
 
-# If using vcpkg, you would typically run CMake like this (from 'build' directory):
-# cmake .. -DCMAKE_BUILD_TYPE=Release -DTEST_MAIN_BUILD=ON -DCMAKE_TOOLCHAIN_FILE=<path_to_vcpkg>/scripts/buildsystems/vcpkg.cmake
-# Then vcpkg automatically helps find and link installed libraries.
+
+# Link the libraries by name. The linker will now find them
+# because of the target_link_directories command above.
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    jansson
+    git2
+)
+
+# Defines the TEST_MAIN_BUILD macro so main() is included.
+target_compile_definitions(${PROJECT_NAME} PRIVATE TEST_MAIN_BUILD)

@@ -1,0 +1,45 @@
+/*
+Name: Internal Host Recon - Database/API Protocol Scan
+Description:
+  Detects scanning or connection attempts targeting common database or API protocols
+  (e.g., Redis, MongoDB, MSSQL_TDS, MySQL, Oracle, Postgres, DRDA, Cassandra, Elasticsearch, JSON-RPC, Protobuf, WebDAV, AMQP, Memcached, Z3950).
+  This behavior indicates reconnaissance for high-value data sources or attempts to exploit application programming interfaces.
+MITRE ATT&CK Mapping:
+  T1046 - Network Service Discovery: For finding these services.
+Severity Score: 4
+Rationale:
+  High confidence. Unusual probing or connection attempts to database/API services from non-authorized hosts
+  are often a precursor to data exfiltration or unauthorized access.
+*/
+SELECT
+    'db_api_scan' AS report_name,
+    SrcIp,
+    DestIp,
+    MasterProtocol,
+    SubProtocol,
+    count() AS Total_Protocol_Attempts,
+    min(Timestamp) AS First_Attempt,
+    max(Timestamp) AS Last_Attempt,
+    format('Src {} made {} attempts to {} using database/API protocol {} (Sub: {}). High-value device reconnaissance suspected.', SrcIp, toString(Total_Protocol_Attempts), DestIp, MasterProtocol, SubProtocol) AS description,
+    'T1046' AS mitre_mapping,
+    4 AS severity_score,
+    arrayStringConcat(arraySlice(arraySort(groupUniqArray(DestIp || ':' || toString(DestPort) || ':' || MasterProtocol || ':' || SubProtocol)), 1, 10), ', ') AS Sample_Dest_IP_Ports_List
+FROM
+    dragonfly.dragonflyClusterScoresJoin
+WHERE
+    DestIpCategory = 'private'
+    AND Timestamp >= now() - toIntervalHour(1)
+    AND (
+        MasterProtocol IN ('REDIS', 'MONGODB', 'MSSQL_TDS', 'MYSQL', 'ORACLE', 'POSTGRES', 'DRDA', 'CASSANDRA', 'ELASTICSEARCH', 'JSON_RPC', 'PROTOBUF', 'WEBDAV', 'AMQP', 'MEMCACHED', 'Z3950')
+        OR SubProtocol IN ('REDIS', 'MONGODB', 'MSSQL_TDS', 'MYSQL', 'ORACLE', 'POSTGRES', 'DRDA', 'CASSANDRA', 'ELASTICSEARCH', 'JSON_RPC', 'PROTOBUF', 'WEBDAV', 'AMQP', 'MEMCACHED', 'Z3950')
+    )
+    AND MasterProtocol != 'Unknown'
+    AND SubProtocol != 'Unknown'
+    AND SrcIp NOT IN ({excluded_ips_list}) -- Placeholder for global exclusion list (SYSLOG_IP, Management_IP)
+GROUP BY
+    SrcIp, DestIp, MasterProtocol, SubProtocol
+HAVING
+    count() > 5
+ORDER BY
+    Total_Protocol_Attempts DESC
+LIMIT 50;
