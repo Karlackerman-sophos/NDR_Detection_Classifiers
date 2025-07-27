@@ -115,7 +115,7 @@ Key configuration parameters include:
 | `SYSLOG_IP_STR_VAR`    | IP address of the syslog server (for exclusion)                | `192.168.1.1`                                       |
 | `MANAGEMENT_IP_STR_VAR`| IP address of the management interface (for exclusion)         | `10.0.0.1`                                          |
 | `GIT_REPO_URL_VAR`     | URL of the Git repository containing detection rules           | `https://github.com/sophos/ndr-detection-rules.git` |
-| `GIT_REPO_BRANCH_VAR`  | Branch of the Git repository to pull rules from                | `main`                                              |
+| `GIT_REPO_BRANCH_VAR`  | Branch of the Git repository to pull rules from                | `sophos_internal`                                   |
 | `GIT_RULES_PATH_VAR`   | Path within the Git repository where rule directories reside   | `detection-rules/`                                  |
 | `BATCH_ID_VAR`         | A unique ID for the current execution batch (for temp dir)     | `20250725_1120_batchA`                              |
 | `TIMESPAN_VAR`         | Global time filter string (e.g., for Timestamp > X AND Timestamp < Y) | `(Timestamp > '1678886400' AND Timestamp < '1678890000')` |
