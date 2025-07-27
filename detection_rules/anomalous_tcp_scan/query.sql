@@ -22,7 +22,8 @@ SELECT
     format('Src {} sent {} probes with anomalous TCP flags ({}). Evasion or advanced reconnaissance suspected.', SrcIp, toString(count()), toString(ClientToServerTcpFlags)) AS description,
     'T1595.002' AS mitre_mapping,
     5 AS severity_score,
-    arrayStringConcat(arraySlice(arraySort(groupUniqArray(DestIp || ':' || toString(DestPort))), 1, 10), ', ') AS Sample_Dest_IP_Ports_List
+    arrayStringConcat(arraySlice(arraySort(groupUniqArray(DestIp || ':' || toString(DestPort))), 1, 10), ', ') AS Sample_Dest_IP_Ports_List,
+    SensorId
 FROM
     dragonfly.dragonflyClusterScoresJoin
 WHERE
@@ -32,14 +33,14 @@ WHERE
     AND ServerToClientPacketCount <= 1
     AND ClientToServerDuration < 500
     AND (
-           ClientToServerTcpFlags = 1        -- FIN
-        OR ClientToServerTcpFlags = 0        -- NULL
-        OR ClientToServerTcpFlags = 41       -- Xmas (FIN | PSH | URG)
-        OR ClientToServerTcpFlags = 16       -- ACK (pure ACK without SYN)
+           ClientToServerTcpFlags = 1        /* FIN */
+        OR ClientToServerTcpFlags = 0        /* NULL */
+        OR ClientToServerTcpFlags = 41       /* Xmas (FIN | PSH | URG) */
+        OR ClientToServerTcpFlags = 16       /* ACK (pure ACK without SYN) */
     )
     AND SrcIp NOT IN ({excluded_ips_list}) -- Placeholder for global exclusion list (SYSLOG_IP, Management_IP)
 GROUP BY
-    SrcIp, ClientToServerTcpFlags
+    SrcIp, ClientToServerTcpFlags, SensorId
 HAVING
     count(DISTINCT DestIp) > 10 OR count(DISTINCT DestPort) > 10
 ORDER BY
