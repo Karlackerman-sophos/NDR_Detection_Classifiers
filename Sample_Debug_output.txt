@@ -1,0 +1,1053 @@
+Initializing DetectionManager...
+Cloning https://github.com/Karlackerman-sophos/NDR_Detection_Classifiers branch 'sophos-internal' to C:\Users\karlackerman\AppData\Local\Temp\ndr_repo_1753619104
+Successfully cloned repository.
+Searching for rules in: C:\Users\karlackerman\AppData\Local\Temp\ndr_repo_1753619104\detection_rules/
+
+--- Detection Rules Detailed Summary ---
+
+--------------------------------------------------------------------------------
+ID:                   aggresive_scan
+Name:                 Internal Host Recon - Aggressive Multi-Target/Multi-Port Scan
+Enabled:              true
+Monitor Mode:         1
+Frequency (seconds):  3600
+Default Severity:     5
+MITRE Attack Mapping: T1595.001
+Description:          Detects an internal source IP engaging in highly aggressive
+                      and broad reconnaissance. This involves simultaneous
+                      scanning of many unique IP addresses and many unique ports
+                      using stealthy SYN probes, indicative of automated malicious
+                      activity.
+
+--------------------------------------------------------------------------------
+ID:                   anomalous_tcp_scan
+Name:                 Internal Host Recon - Anomalous TCP Flag Scan
+Enabled:              true
+Monitor Mode:         1
+Frequency (seconds):  3600
+Default Severity:     5
+MITRE Attack Mapping: T1595.002
+Description:          Detects an internal source IP sending probes with highly
+                      unusual TCP flag combinations (e.g., FIN, NULL, Xmas, or
+                      pure ACK). This often indicates an advanced reconnaissance
+                      attempt designed to evade detection or map firewalls.
+
+--------------------------------------------------------------------------------
+ID:                   db_api_scan
+Name:                 Internal Host Recon - Database/API Protocol Scan
+Enabled:              true
+Monitor Mode:         1
+Frequency (seconds):  3600
+Default Severity:     4
+MITRE Attack Mapping: T1046
+Description:          Detects scanning or connection attempts targeting common
+                      database or API protocols (e.g., Redis, MongoDB, MSSQL_TDS,
+                      MySQL, Oracle, Postgres, DRDA, Cassandra, Elasticsearch,
+                      JSON-RPC, Protobuf, WebDAV, AMQP, Memcached, Z3950). This
+                      behavior indicates reconnaissance for high-value data
+                      sources or attempts to exploit application programming
+                      interfaces.
+
+--------------------------------------------------------------------------------
+ID:                   discovery_protocol_abuse
+Name:                 Internal Host Recon - Discovery Protocol Abuse
+Enabled:              true
+Monitor Mode:         1
+Frequency (seconds):  3600
+Default Severity:     5
+MITRE Attack Mapping: T1046
+Description:          Identifies an internal source IP querying multiple unique
+                      hosts or a high volume of traffic related to typically
+                      benign discovery protocols (LLMNR, MDNS, SSDP, WSD, NATPMP,
+                      SLP). This can indicate an attacker attempting to enumerate
+                      internal hosts, services, or perform credential relay
+                      attacks.
+
+--------------------------------------------------------------------------------
+ID:                   established_smbv1
+Name:                 Internal Host Activity - Established SMBv1 Connection
+Enabled:              true
+Monitor Mode:         1
+Frequency (seconds):  3600
+Default Severity:     5
+MITRE Attack Mapping: T1210
+Description:          Detects actual established TCP connections utilizing the
+                      highly vulnerable SMBv1 protocol. This is a critical alert,
+                      as a confirmed connection to an SMBv1 service implies
+                      successful interaction and is a strong indicator of active
+                      malicious activity or a severe policy violation.
+
+--------------------------------------------------------------------------------
+ID:                   full_connect_scan
+Name:                 Internal Host Recon - Full-Connect Application Scan
+Enabled:              true
+Monitor Mode:         1
+Frequency (seconds):  3600
+Default Severity:     3
+MITRE Attack Mapping: T1595.002
+Description:          Identifies an internal source IP establishing a high number
+                      of full TCP connections to unique internal IP addresses or
+                      unique ports, where an application-layer protocol is
+                      identified. This suggests a full-connect scan targeting
+                      specific services.
+
+--------------------------------------------------------------------------------
+ID:                   ics_mgmt_scan
+Name:                 Internal Host Recon/Compromise - ICS/Management Protocol Scan
+Enabled:              true
+Monitor Mode:         1
+Frequency (seconds):  3600
+Default Severity:     5
+MITRE Attack Mapping: T1046
+Description:          Detects scanning or connection attempts targeting highly
+                      sensitive Industrial Control System (ICS) or out-of-band
+                      management protocols (IPMI, MMS, PROFINET_IO, EtherNet/IP,
+                      S7COMM, DNP3, IEC60870). Any activity related to these
+                      protocols from non-authorized sources is a critical security
+                      concern.
+
+--------------------------------------------------------------------------------
+ID:                   ip_protocol_scan
+Name:                 Internal Host Recon - IP Protocol Scan
+Enabled:              true
+Monitor Mode:         1
+Frequency (seconds):  3600
+Default Severity:     4
+MITRE Attack Mapping: T1046
+Description:          Detects an internal source IP attempting to discover which
+                      IP protocols (e.g., TCP, UDP, ICMP, IGMP) are supported by
+                      target hosts by sending probes with many different IP
+                      protocol numbers.
+
+--------------------------------------------------------------------------------
+ID:                   port_sweep
+Name:                 Internal Host Recon - Target Port Sweep
+Enabled:              true
+Monitor Mode:         1
+Frequency (seconds):  3600
+Default Severity:     4
+MITRE Attack Mapping: T1046
+Description:          Identifies an internal source IP performing a stealthy SYN
+                      scan against a high number of unique ports on a single
+                      destination IP. This suggests targeted reconnaissance to
+                      identify open services and potential vulnerabilities on a
+                      specific host.
+
+--------------------------------------------------------------------------------
+ID:                   smbv1_targeted_activity
+Name:                 Internal Host Recon/Lateral Movement - SMBv1 Scan
+Enabled:              true
+Monitor Mode:         1
+Frequency (seconds):  3600
+Default Severity:     5
+MITRE Attack Mapping: T1210
+Description:          Detects attempts from an internal source IP to connect to or
+                      scan for SMBv1 services. SMBv1 is a deprecated and highly
+                      vulnerable protocol, and any active use from a
+                      non-authorized host is a critical security concern, often
+                      indicative of an adversary attempting lateral movement or
+                      exploitation (e.g., WannaCry, NotPetya).
+
+--------------------------------------------------------------------------------
+ID:                   syn_scan
+Name:                 Internal Host Recon - High Unique IP SYN Scan
+Enabled:              true
+Monitor Mode:         1
+Frequency (seconds):  3600
+Default Severity:     4
+MITRE Attack Mapping: T1595.001
+Description:          Detects an internal source IP performing a stealthy SYN scan
+                      against a high number of unique private IP addresses. This
+                      indicates active reconnaissance to discover live hosts,
+                      likely from a compromised system or unauthorized activity.
+                      Alerts on broad network mapping attempts.
+
+--------------------------------------------------------------------------------
+ID:                   udp_app_scan
+Name:                 Internal Host Recon - UDP Application Scan
+Enabled:              true
+Monitor Mode:         1
+Frequency (seconds):  3600
+Default Severity:     4
+MITRE Attack Mapping: T1046
+Description:          Detects an internal source IP attempting to probe a high
+                      number of unique UDP ports on a destination, specifically
+                      for known application protocols like DNS, NTP, or SSDP. This
+                      indicates targeted reconnaissance against specific UDP
+                      services.
+--------------------------------------------------------------------------------
+
+Total rules loaded: 12
+
+--- Now executing rules individually ---
+
+================================================================================
+EXECUTING RULE: Internal Host Recon - Aggressive Multi-Target/Multi-Port Scan
+================================================================================
+
+1. Preparing Global Variables...
+   - {excluded_ips_list}: '10.0.0.1', '192.168.1.1'
+
+2. Loading SQL template and substituting variables...
+
+   --- Final SQL Query ---
+/*
+Name: Internal Host Recon - Aggressive Multi-Target/Multi-Port Scan
+Description:
+  Detects an internal source IP engaging in highly aggressive and broad reconnaissance.
+  This involves simultaneous scanning of many unique IP addresses and many unique ports using stealthy SYN probes, indicative of automated malicious activity.
+MITRE ATT&CK Mapping:
+  T1595.001 - Active Scanning: Scanning IP Blocks/Ranges: High number of unique IPs scanned.
+Severity Score: 5
+Rationale:
+  Highest confidence. This combines the breadth of IP scanning with the depth of port scanning, all in an aggressive, stealthy manner.
+  This screams automated, malicious activity. Very low FP rate if thresholds are tuned correctly.
+*/
+SELECT
+    'aggressive_scan' AS report_name,
+    SrcIp,
+    count(DISTINCT DestIp) AS Total_Unique_DestIPs,
+    count(DISTINCT DestPort) AS Total_Unique_DestPorts,
+    count() AS Total_Attempts,
+    min(Timestamp) AS First_Attempt,
+    max(Timestamp) AS Last_Attempt,
+    format('Src {} engaged in aggressive stealthy SYN scanning across {} IPs and {} ports, with {} total attempts. Automated reconnaissance suspected.', SrcIp, toString(count(DISTINCT DestIp)), toString(count(DISTINCT DestPort)), toString(count())) AS description,
+    'T1595.001' AS mitre_mapping,
+    5 AS severity_score,
+    arrayStringConcat(arraySlice(arraySort(groupUniqArray(DestIp || ':' || toString(DestPort))), 1, 10), ', ') AS Sample_Dest_IP_Ports_List
+FROM
+    dragonfly.dragonflyClusterScoresJoin
+WHERE
+    DestIpCategory = 'private'
+    AND Timestamp >= now() - toIntervalHour(1)
+    AND ClientToServerPacketCount = 1
+    AND ServerToClientPacketCount <= 1
+    AND ClientToServerTcpFlags = 2
+    AND (bitAnd(ServerToClientTcpFlags, 18) = 18 OR bitAnd(ServerToClientTcpFlags, 20) = 20 OR ServerToClientTcpFlags = 0)
+    AND ClientToServerDuration < 500
+    AND SrcIp NOT IN ('10.0.0.1', '192.168.1.1')
+GROUP BY
+    SrcIp
+HAVING
+    count(DISTINCT DestIp) > 20
+    AND count(DISTINCT DestPort) > 5
+    AND count() > 50
+ORDER BY
+    Total_Attempts DESC
+LIMIT 50;
+
+   -----------------------
+
+3. Sending query to simulated ClickHouse client...
+
+4. Received simulated result:
+{
+  "detection_context": [
+    {
+      "details": "Generic simulated event.",
+      "report_name": "aggresive_scan",
+      "source_ip": "172.16.0.10"
+    }
+  ],
+  "detection_name": "Internal Host Recon - Aggressive Multi-Target/Multi-Port Scan",
+  "severity": 5
+}
+
+================================================================================
+EXECUTING RULE: Internal Host Recon - Anomalous TCP Flag Scan
+================================================================================
+
+1. Preparing Global Variables...
+   - {excluded_ips_list}: '10.0.0.1', '192.168.1.1'
+
+2. Loading SQL template and substituting variables...
+
+   --- Final SQL Query ---
+/*
+Name: Internal Host Recon - Anomalous TCP Flag Scan
+Description:
+  Detects an internal source IP sending probes with highly unusual TCP flag combinations (e.g., FIN, NULL, Xmas, or pure ACK).
+  This often indicates an advanced reconnaissance attempt designed to evade detection or map firewalls.
+MITRE ATT&CK Mapping:
+  T1595.002 - Active Scanning: Vulnerability Scanning: These flags are used to probe for services, potentially bypassing detection.
+Severity Score: 5
+Rationale:
+  Extremely high confidence. These are highly specific and almost always malicious or from a dedicated security testing tool.
+  The FP rate should be very low if configured correctly.
+*/
+SELECT
+    'anomalous_tcp_scan' AS report_name,
+    SrcIp,
+    ClientToServerTcpFlags,
+    count(DISTINCT DestIp) AS Unique_DestIPs_Probed,
+    count(DISTINCT DestPort) AS Unique_DestPorts_Probed,
+    count() AS Total_Probes,
+    min(Timestamp) AS First_Probe,
+    max(Timestamp) AS Last_Attempt,
+    format('Src {} sent {} probes with anomalous TCP flags ({}). Evasion or advanced reconnaissance suspected.', SrcIp, toString(count()), toString(ClientToServerTcpFlags)) AS description,
+    'T1595.002' AS mitre_mapping,
+    5 AS severity_score,
+    arrayStringConcat(arraySlice(arraySort(groupUniqArray(DestIp || ':' || toString(DestPort))), 1, 10), ', ') AS Sample_Dest_IP_Ports_List
+FROM
+    dragonfly.dragonflyClusterScoresJoin
+WHERE
+    DestIpCategory = 'private'
+    AND Timestamp >= now() - toIntervalHour(1)
+    AND ClientToServerPacketCount = 1
+    AND ServerToClientPacketCount <= 1
+    AND ClientToServerDuration < 500
+    AND (
+           ClientToServerTcpFlags = 1        -- FIN
+        OR ClientToServerTcpFlags = 0        -- NULL
+        OR ClientToServerTcpFlags = 41       -- Xmas (FIN | PSH | URG)
+        OR ClientToServerTcpFlags = 16       -- ACK (pure ACK without SYN)
+    )
+    AND SrcIp NOT IN ('10.0.0.1', '192.168.1.1') -- Placeholder for global exclusion list (SYSLOG_IP, Management_IP)
+GROUP BY
+    SrcIp, ClientToServerTcpFlags
+HAVING
+    count(DISTINCT DestIp) > 10 OR count(DISTINCT DestPort) > 10
+ORDER BY
+    Total_Probes DESC
+LIMIT 50;
+
+   -----------------------
+
+3. Sending query to simulated ClickHouse client...
+
+4. Received simulated result:
+{
+  "detection_context": [
+    {
+      "details": "Generic simulated event.",
+      "report_name": "anomalous_tcp_scan",
+      "source_ip": "172.16.0.10"
+    }
+  ],
+  "detection_name": "Internal Host Recon - Anomalous TCP Flag Scan",
+  "severity": 5
+}
+
+================================================================================
+EXECUTING RULE: Internal Host Recon - Database/API Protocol Scan
+================================================================================
+
+1. Preparing Global Variables...
+   - {excluded_ips_list}: '10.0.0.1', '192.168.1.1'
+
+2. Loading SQL template and substituting variables...
+
+   --- Final SQL Query ---
+/*
+Name: Internal Host Recon - Database/API Protocol Scan
+Description:
+  Detects scanning or connection attempts targeting common database or API protocols
+  (e.g., Redis, MongoDB, MSSQL_TDS, MySQL, Oracle, Postgres, DRDA, Cassandra, Elasticsearch, JSON-RPC, Protobuf, WebDAV, AMQP, Memcached, Z3950).
+  This behavior indicates reconnaissance for high-value data sources or attempts to exploit application programming interfaces.
+MITRE ATT&CK Mapping:
+  T1046 - Network Service Discovery: For finding these services.
+Severity Score: 4
+Rationale:
+  High confidence. Unusual probing or connection attempts to database/API services from non-authorized hosts
+  are often a precursor to data exfiltration or unauthorized access.
+*/
+SELECT
+    'db_api_scan' AS report_name,
+    SrcIp,
+    DestIp,
+    MasterProtocol,
+    SubProtocol,
+    count() AS Total_Protocol_Attempts,
+    min(Timestamp) AS First_Attempt,
+    max(Timestamp) AS Last_Attempt,
+    format('Src {} made {} attempts to {} using database/API protocol {} (Sub: {}). High-value device reconnaissance suspected.', SrcIp, toString(Total_Protocol_Attempts), DestIp, MasterProtocol, SubProtocol) AS description,
+    'T1046' AS mitre_mapping,
+    4 AS severity_score,
+    arrayStringConcat(arraySlice(arraySort(groupUniqArray(DestIp || ':' || toString(DestPort) || ':' || MasterProtocol || ':' || SubProtocol)), 1, 10), ', ') AS Sample_Dest_IP_Ports_List
+FROM
+    dragonfly.dragonflyClusterScoresJoin
+WHERE
+    DestIpCategory = 'private'
+    AND Timestamp >= now() - toIntervalHour(1)
+    AND (
+        MasterProtocol IN ('REDIS', 'MONGODB', 'MSSQL_TDS', 'MYSQL', 'ORACLE', 'POSTGRES', 'DRDA', 'CASSANDRA', 'ELASTICSEARCH', 'JSON_RPC', 'PROTOBUF', 'WEBDAV', 'AMQP', 'MEMCACHED', 'Z3950')
+        OR SubProtocol IN ('REDIS', 'MONGODB', 'MSSQL_TDS', 'MYSQL', 'ORACLE', 'POSTGRES', 'DRDA', 'CASSANDRA', 'ELASTICSEARCH', 'JSON_RPC', 'PROTOBUF', 'WEBDAV', 'AMQP', 'MEMCACHED', 'Z3950')
+    )
+    AND MasterProtocol != 'Unknown'
+    AND SubProtocol != 'Unknown'
+    AND SrcIp NOT IN ('10.0.0.1', '192.168.1.1') -- Placeholder for global exclusion list (SYSLOG_IP, Management_IP)
+GROUP BY
+    SrcIp, DestIp, MasterProtocol, SubProtocol
+HAVING
+    count() > 5
+ORDER BY
+    Total_Protocol_Attempts DESC
+LIMIT 50;
+
+   -----------------------
+
+3. Sending query to simulated ClickHouse client...
+
+4. Received simulated result:
+{
+  "detection_context": [
+    {
+      "details": "Generic simulated event.",
+      "report_name": "db_api_scan",
+      "source_ip": "172.16.0.10"
+    }
+  ],
+  "detection_name": "Internal Host Recon - Database/API Protocol Scan",
+  "severity": 4
+}
+
+================================================================================
+EXECUTING RULE: Internal Host Recon - Discovery Protocol Abuse
+================================================================================
+
+1. Preparing Global Variables...
+   - {excluded_ips_list}: '10.0.0.1', '192.168.1.1'
+
+2. Loading SQL template and substituting variables...
+
+   --- Final SQL Query ---
+/*
+Name: Internal Host Recon - Discovery Protocol Abuse
+Description:
+  Identifies an internal source IP querying multiple unique hosts or a high volume of traffic related to typically benign discovery protocols
+  (LLMNR, MDNS, SSDP, WSD, NATPMP, SLP).
+  This can indicate an attacker attempting to enumerate internal hosts, services, or perform credential relay attacks.
+MITRE ATT&CK Mapping:
+  T1046 - Network Service Discovery: For finding services.
+Severity Score: 5
+Rationale:
+  Abuse of these specific protocols is a very high-fidelity indicator of malicious internal reconnaissance,
+  often a precursor to lateral movement and credential theft. Benign use typically involves low volume or specific applications.
+*/
+SELECT
+    'discovery_protocol_abuse' AS report_name,
+    SrcIp,
+    MasterProtocol,
+    SubProtocol,
+    count(DISTINCT DestIp) AS Unique_DestIPs_Queried,
+    count() AS Total_Queries,
+    min(Timestamp) AS First_Query_Attempt,
+    max(Timestamp) AS Last_Attempt,
+    format('Src {} performed a high volume of {} queries (Sub: {}) against {} unique internal IPs. Discovery protocol abuse suspected.', SrcIp, MasterProtocol, SubProtocol, toString(count(DISTINCT DestIp))) AS description,
+    'T1046' AS mitre_mapping,
+    5 AS severity_score,
+    arrayStringConcat(arraySlice(arraySort(groupUniqArray(DestIp || ':' || toString(DestPort) || ':' || MasterProtocol || ':' || SubProtocol)), 1, 10), ', ') AS Sample_Dest_IP_Ports_List
+FROM
+    dragonfly.dragonflyClusterScoresJoin
+WHERE
+    DestIpCategory = 'private'
+    AND Timestamp >= now() - toIntervalHour(1)
+    AND Protocol = 'UDP'
+    AND MasterProtocol IN ('LLMNR', 'MDNS', 'SSDP', 'WSD', 'NATPMP', 'SLP')
+    AND DestIp IN ('224.0.0.251', '239.255.255.250', '224.0.0.252')
+    AND SubProtocol != 'Unknown'
+    AND SrcIp NOT IN ('10.0.0.1', '192.168.1.1') -- Placeholder for global exclusion list (SYSLOG_IP, Management_IP)
+GROUP BY
+    SrcIp, MasterProtocol, SubProtocol
+HAVING
+    count(DISTINCT DestIp) > 5
+    OR count() > 20
+ORDER BY
+    Total_Queries DESC
+LIMIT 50;
+
+   -----------------------
+
+3. Sending query to simulated ClickHouse client...
+
+4. Received simulated result:
+{
+  "detection_context": [
+    {
+      "details": "Generic simulated event.",
+      "report_name": "discovery_protocol_abuse",
+      "source_ip": "172.16.0.10"
+    }
+  ],
+  "detection_name": "Internal Host Recon - Discovery Protocol Abuse",
+  "severity": 5
+}
+
+================================================================================
+EXECUTING RULE: Internal Host Activity - Established SMBv1 Connection
+================================================================================
+
+1. Preparing Global Variables...
+   - {excluded_ips_list}: '10.0.0.1', '192.168.1.1'
+
+2. Loading SQL template and substituting variables...
+
+   --- Final SQL Query ---
+/*
+Name: Internal Host Activity - Established SMBv1 Connection
+Description:
+  Detects actual established TCP connections utilizing the highly vulnerable SMBv1 protocol.
+  This is a critical alert, as a confirmed connection to an SMBv1 service implies successful interaction
+  and is a strong indicator of active malicious activity or a severe policy violation.
+MITRE ATT&CK Mapping:
+  T1210 - Exploitation of Remote Services: If an adversary is establishing a connection for exploitation.
+Severity Score: 5
+Rationale:
+  A confirmed established connection over SMBv1 is an extremely high-confidence indicator of active risk,
+  given its severe known vulnerabilities.
+*/
+SELECT
+    'established_smbv1' AS report_name,
+    SrcIp,
+    DestIp,
+    MasterProtocol,
+    SubProtocol,
+    count() AS Total_Established_SMBv1_Connections,
+    min(Timestamp) AS First_Connection_Time,
+    max(Timestamp) AS Last_Connection_Time,
+    format('Src {} established {} SMBv1 connection(s) to {}. Critical SMBv1 use detected.', SrcIp, toString(count()), DestIp) AS description,
+    'T1210' AS mitre_mapping,
+    5 AS severity_score,
+    arrayStringConcat(arraySlice(arraySort(groupUniqArray(DestIp || ':' || toString(DestPort) || ':' || MasterProtocol || ':' || SubProtocol)), 1, 10), ', ') AS Sample_Dest_IP_Ports_List
+FROM
+    dragonfly.dragonflyClusterScoresJoin
+WHERE
+    DestIpCategory = 'private'
+    AND Timestamp >= now() - toIntervalHour(1)
+    AND (
+        MasterProtocol IN ('SMBv1', 'NetBIOS')
+        AND SubProtocol = 'SMBv1'
+    )
+    AND ClientToServerPacketCount > 1
+    AND ServerToClientPacketCount > 1
+    AND bitAnd(ClientToServerTcpFlags, 16) = 16
+    AND bitAnd(ServerToClientTcpFlags, 18) = 18
+    AND ClientToServerDuration >= 1000
+    AND SrcIp NOT IN ('10.0.0.1', '192.168.1.1') -- Placeholder for global exclusion list (SYSLOG_IP, Management_IP)
+GROUP BY
+    SrcIp, DestIp, MasterProtocol, SubProtocol
+HAVING
+    count() >= 1
+ORDER BY
+    Total_Established_SMBv1_Connections DESC
+LIMIT 50;
+
+   -----------------------
+
+3. Sending query to simulated ClickHouse client...
+
+4. Received simulated result:
+{
+  "detection_context": [
+    {
+      "DestIp": "192.168.10.22",
+      "SrcIp": "192.168.10.15",
+      "description": "Confirmed SMBv1 connection from 192.168.10.15 to 192.168.10.22",
+      "report_name": "established_smbv1"
+    }
+  ],
+  "detection_name": "Internal Host Activity - Established SMBv1 Connection",
+  "severity": 5
+}
+
+================================================================================
+EXECUTING RULE: Internal Host Recon - Full-Connect Application Scan
+================================================================================
+
+1. Preparing Global Variables...
+   - {excluded_ips_list}: '10.0.0.1', '192.168.1.1'
+
+2. Loading SQL template and substituting variables...
+
+   --- Final SQL Query ---
+/*
+Name: Internal Host Recon - Full-Connect Application Scan
+Description:
+  Identifies an internal source IP establishing a high number of full TCP connections to unique internal IP addresses or unique ports,
+  where an application-layer protocol is identified. This suggests a full-connect scan targeting specific services.
+MITRE ATT&CK Mapping:
+  T1595.002 - Active Scanning: Vulnerability Scanning: Very strong indicator of vulnerability scanning if specific services are targeted or many ports on the same host.
+Severity Score: 3
+Rationale:
+  Higher FP risk than stealthy scans if there are legitimate tools. Could be legitimate but needs verification.
+  If it's *not* a known scanner, it's very concerning.
+*/
+SELECT
+    'full_connect_scan' AS report_name,
+    SrcIp,
+    MasterProtocol,
+    SubProtocol,
+    count(DISTINCT DestIp) AS Unique_DestIPs_Connected,
+    count(DISTINCT DestPort) AS Unique_DestPorts_Connected,
+    count() AS Total_Connections,
+    min(Timestamp) AS First_Connection,
+    max(Timestamp) AS Last_Connection,
+    format('Src {} established {} full TCP connections to unique internal IPs and {} unique ports, often for {} ({}). Full-connect scan or data exfiltration suspected.', SrcIp, toString(count(DISTINCT DestIp)), toString(count(DISTINCT DestPort)), MasterProtocol, SubProtocol) AS description,
+    'T1595.002' AS mitre_mapping,
+    3 AS severity_score,
+    arrayStringConcat(arraySlice(arraySort(groupUniqArray(DestIp || ':' || toString(DestPort) || ':' || MasterProtocol || ':' || SubProtocol)), 1, 10), ', ') AS Sample_Dest_IP_Ports_List
+FROM
+    dragonfly.dragonflyClusterScoresJoin
+WHERE
+    DestIpCategory = 'private'
+    AND Timestamp >= now() - toIntervalHour(1)
+    AND ClientToServerPacketCount > 1
+    AND ServerToClientPacketCount > 1
+    AND bitAnd(ClientToServerTcpFlags, 16) = 16
+    AND bitAnd(ServerToClientTcpFlags, 18) = 18
+    AND ClientToServerDuration >= 1000
+    AND MasterProtocol != 'Unknown'
+    AND SubProtocol != 'Unknown'
+    AND MasterProtocol NOT IN ('ICMPV6', 'IGMP')
+    AND SrcIp NOT IN ('10.0.0.1', '192.168.1.1') -- Placeholder for global exclusion list (SYSLOG_IP, Management_IP)
+GROUP BY
+    SrcIp, MasterProtocol, SubProtocol
+HAVING
+    count(DISTINCT DestIp) > 5
+    OR count(DISTINCT DestPort) > 5
+ORDER BY
+    Total_Connections DESC
+LIMIT 50;
+
+   -----------------------
+
+3. Sending query to simulated ClickHouse client...
+
+4. Received simulated result:
+{
+  "detection_context": [
+    {
+      "details": "Generic simulated event.",
+      "report_name": "full_connect_scan",
+      "source_ip": "172.16.0.10"
+    }
+  ],
+  "detection_name": "Internal Host Recon - Full-Connect Application Scan",
+  "severity": 3
+}
+
+================================================================================
+EXECUTING RULE: Internal Host Recon/Compromise - ICS/Management Protocol Scan
+================================================================================
+
+1. Preparing Global Variables...
+   - {excluded_ips_list}: '10.0.0.1', '192.168.1.1'
+
+2. Loading SQL template and substituting variables...
+
+   --- Final SQL Query ---
+/*
+Name: Internal Host Recon/Compromise - ICS/Management Protocol Scan
+Description:
+  Detects scanning or connection attempts targeting highly sensitive Industrial Control System (ICS) or out-of-band management protocols
+  (IPMI, MMS, PROFINET_IO, EtherNet/IP, S7COMM, DNP3, IEC60870).
+  Any activity related to these protocols from non-authorized sources is a critical security concern.
+MITRE ATT&CK Mapping:
+  T1046 - Network Service Discovery: For finding these specialized services.
+Severity Score: 5
+Rationale:
+  Extremely high confidence. These protocols are not typically used by general IT devices for discovery,
+  and any probing often indicates highly targeted malicious activity or a severe policy violation in environments where they are present.
+*/
+SELECT
+    'ics_mgmt_scan' AS report_name,
+    SrcIp,
+    DestIp,
+    MasterProtocol,
+    SubProtocol,
+    count() AS Total_Protocol_Attempts,
+    min(Timestamp) AS First_Attempt,
+    max(Timestamp) AS Last_Attempt,
+    format('Src {} made {} attempts to {} using sensitive protocol {} (Sub: {}). ICS/management reconnaissance or compromise suspected.', SrcIp, toString(Total_Protocol_Attempts), DestIp, MasterProtocol, SubProtocol) AS description,
+    'T1046' AS mitre_mapping,
+    5 AS severity_score,
+    arrayStringConcat(arraySlice(arraySort(groupUniqArray(DestIp || ':' || toString(DestPort) || ':' || MasterProtocol || ':' || SubProtocol)), 1, 10), ', ') AS Sample_Dest_IP_Ports_List
+FROM
+    dragonfly.dragonflyClusterScoresJoin
+WHERE
+    DestIpCategory = 'private'
+    AND Timestamp >= now() - toIntervalHour(1)
+    AND (
+        MasterProtocol IN ('IPMI', 'MMS', 'PROFINET_IO', 'ETHERNET_IP', 'S7COMM', 'DNP3', 'IEC60870')
+        OR SubProtocol IN ('IPMI', 'MMS', 'PROFINET_IO', 'ETHERNET_IP', 'S7COMM', 'DNP3', 'IEC60870')
+    )
+    AND MasterProtocol != 'Unknown'
+    AND SubProtocol != 'Unknown'
+    AND SrcIp NOT IN ('10.0.0.1', '192.168.1.1') -- Placeholder for global exclusion list (SYSLOG_IP, Management_IP)
+GROUP BY
+    SrcIp, DestIp, MasterProtocol, SubProtocol
+HAVING
+    count() > 1
+ORDER BY
+    Total_Protocol_Attempts DESC
+LIMIT 50;
+
+   -----------------------
+
+3. Sending query to simulated ClickHouse client...
+
+4. Received simulated result:
+{
+  "detection_context": [
+    {
+      "details": "Generic simulated event.",
+      "report_name": "ics_mgmt_scan",
+      "source_ip": "172.16.0.10"
+    }
+  ],
+  "detection_name": "Internal Host Recon/Compromise - ICS/Management Protocol Scan",
+  "severity": 5
+}
+
+================================================================================
+EXECUTING RULE: Internal Host Recon - IP Protocol Scan
+================================================================================
+
+1. Preparing Global Variables...
+   - {excluded_ips_list}: '10.0.0.1', '192.168.1.1'
+
+2. Loading SQL template and substituting variables...
+
+   --- Final SQL Query ---
+/*
+Name: Internal Host Recon - IP Protocol Scan
+Description:
+  Detects an internal source IP attempting to discover which IP protocols (e.g., TCP, UDP, ICMP, IGMP) are supported by target hosts
+  by sending probes with many different IP protocol numbers.
+MITRE ATT&CK Mapping:
+  T1046 - Network Service Discovery: For finding services/protocols.
+Severity Score: 4
+Rationale:
+  IP protocol scans are highly unusual in normal network traffic and are almost exclusively used for reconnaissance by security tools or attackers.
+*/
+SELECT
+    'ip_protocol_scan' AS report_name,
+    SrcIp,
+    DestIp,
+    count(DISTINCT Protocol) AS Unique_Protocols_Scanned,
+    min(Timestamp) AS First_Scan_Attempt,
+    max(Timestamp) AS Last_Attempt,
+    format('Src {} performed IP protocol scan against {} by probing {} unique protocols. Protocol discovery suspected.', SrcIp, DestIp, toString(count(DISTINCT Protocol))) AS description,
+    'T1046' AS mitre_mapping,
+    4 AS severity_score,
+    arrayStringConcat(arraySlice(arraySort(groupUniqArray(DestIp || ':' || toString(Protocol))), 1, 10), ', ') AS Sample_Dest_IP_Protocol_List
+FROM
+    dragonfly.dragonflyClusterScoresJoin
+WHERE
+    DestIpCategory = 'private'
+    AND Timestamp >= now() - toIntervalHour(1)
+    AND DestPort = 0
+    AND ClientToServerPacketCount = 1
+    AND ServerToClientPacketCount <= 1
+    AND ClientToServerDuration < 500
+    AND SrcIp NOT IN ('10.0.0.1', '192.168.1.1') -- Placeholder for global exclusion list (SYSLOG_IP, Management_IP)
+GROUP BY
+    SrcIp, DestIp
+HAVING
+    count(DISTINCT Protocol) > 3
+ORDER BY
+    Unique_Protocols_Scanned DESC
+LIMIT 50;
+
+   -----------------------
+
+3. Sending query to simulated ClickHouse client...
+
+4. Received simulated result:
+{
+  "detection_context": [
+    {
+      "details": "Generic simulated event.",
+      "report_name": "ip_protocol_scan",
+      "source_ip": "172.16.0.10"
+    }
+  ],
+  "detection_name": "Internal Host Recon - IP Protocol Scan",
+  "severity": 4
+}
+
+================================================================================
+EXECUTING RULE: Internal Host Recon - Target Port Sweep
+================================================================================
+
+1. Preparing Global Variables...
+   - {excluded_ips_list}: '10.0.0.1', '192.168.1.1'
+
+2. Loading SQL template and substituting variables...
+
+   --- Final SQL Query ---
+/*
+Name: Internal Host Recon - Target Port Sweep
+Description:
+  Identifies an internal source IP performing a stealthy SYN scan against a high number of unique ports on a single destination IP.
+  This suggests targeted reconnaissance to identify open services and potential vulnerabilities on a specific host.
+MITRE ATT&CK Mapping:
+  T1046 - Network Service Discovery: Directly applicable as the attacker is trying to find what services are running on a specific host.
+Severity Score: 4
+Rationale:
+  Very strong indicator of targeted reconnaissance. Targeting many ports on a *single host* is highly indicative of scanning a specific target for vulnerabilities.
+  Less likely to be background noise.
+*/
+SELECT
+    'port_sweep' AS report_name,
+    SrcIp,
+    DestIp,
+    count(DISTINCT DestPort) AS Unique_DestPorts_Scanned,
+    min(Timestamp) AS First_Scan_Attempt,
+    max(Timestamp) AS Last_Attempt,
+    format('Src {} performed stealthy SYN port sweep against {} targeting {} unique ports. Host/service discovery suspected.', SrcIp, DestIp, toString(count(DISTINCT DestPort))) AS description,
+    'T1046' AS mitre_mapping,
+    4 AS severity_score,
+    arrayStringConcat(arraySlice(arraySort(groupUniqArray(DestIp || ':' || toString(DestPort))), 1, 10), ', ') AS Sample_Dest_IP_Ports_List
+FROM
+    dragonfly.dragonflyClusterScoresJoin
+WHERE
+    DestIpCategory = 'private'
+    AND Timestamp >= now() - toIntervalHour(1)
+    AND ClientToServerPacketCount = 1
+    AND ServerToClientPacketCount <= 1
+    AND ClientToServerTcpFlags = 2
+    AND (bitAnd(ServerToClientTcpFlags, 18) = 18 OR bitAnd(ServerToClientTcpFlags, 20) = 20 OR ServerToClientTcpFlags = 0)
+    AND ClientToServerDuration < 500
+    AND SrcIp NOT IN ('10.0.0.1', '192.168.1.1') -- Placeholder for global exclusion list (SYSLOG_IP, Management_IP)
+GROUP BY
+    SrcIp, DestIp
+HAVING
+    count(DISTINCT DestPort) > 10
+ORDER BY
+    Unique_DestPorts_Scanned DESC
+LIMIT 50;
+
+   -----------------------
+
+3. Sending query to simulated ClickHouse client...
+
+4. Received simulated result:
+{
+  "detection_context": [
+    {
+      "details": "Generic simulated event.",
+      "report_name": "port_sweep",
+      "source_ip": "172.16.0.10"
+    }
+  ],
+  "detection_name": "Internal Host Recon - Target Port Sweep",
+  "severity": 4
+}
+
+================================================================================
+EXECUTING RULE: Internal Host Recon/Lateral Movement - SMBv1 Scan
+================================================================================
+
+1. Preparing Global Variables...
+   - {excluded_ips_list}: '10.0.0.1', '192.168.1.1'
+
+2. Loading SQL template and substituting variables...
+
+   --- Final SQL Query ---
+/*
+Name: Internal Host Recon/Lateral Movement - SMBv1 Scan
+Description:
+  Detects attempts from an internal source IP to connect to or scan for SMBv1 services.
+  SMBv1 is a deprecated and highly vulnerable protocol, and any active use from a non-authorized host is a critical security concern,
+  often indicative of an adversary attempting lateral movement or exploitation (e.g., WannaCry, NotPetya).
+MITRE ATT&CK Mapping:
+  T1210 - Exploitation of Remote Services: If an actual attempt to exploit or use SMBv1 is made.
+Severity Score: 5
+Rationale:
+  SMBv1 usage from an unapproved source is almost always malicious due to its severe known vulnerabilities. High confidence alert.
+*/
+SELECT
+    'smbv1_scan' AS report_name,
+    SrcIp,
+    DestIp,
+    MasterProtocol,
+    SubProtocol,
+    count() AS Total_SMBv1_Attempts,
+    min(Timestamp) AS First_Attempt,
+    max(Timestamp) AS Last_Attempt,
+    format('Src {} made {} attempts to {} using highly vulnerable SMBv1 protocol. Possible exploitation or lateral movement.', SrcIp, toString(count()), DestIp) AS description,
+    'T1210' AS mitre_mapping,
+    5 AS severity_score,
+    arrayStringConcat(arraySlice(arraySort(groupUniqArray(DestIp || ':' || toString(DestPort) || ':' || MasterProtocol || ':' || SubProtocol)), 1, 10), ', ') AS Sample_Dest_IP_Ports_List
+FROM
+    dragonfly.dragonflyClusterScoresJoin
+WHERE
+    DestIpCategory = 'private'
+    AND Timestamp >= now() - toIntervalHour(1)
+    AND (
+        MasterProtocol IN ('SMBv1', 'NetBIOS')
+        AND SubProtocol = 'SMBv1'
+    )
+    AND SrcIp NOT IN ('10.0.0.1', '192.168.1.1') -- Placeholder for global exclusion list (SYSLOG_IP, Management_IP)
+GROUP BY
+    SrcIp, DestIp, MasterProtocol, SubProtocol
+HAVING
+    count() > 50
+ORDER BY
+    Total_SMBv1_Attempts DESC
+LIMIT 50;
+
+   -----------------------
+
+3. Sending query to simulated ClickHouse client...
+
+4. Received simulated result:
+{
+  "detection_context": [
+    {
+      "details": "Generic simulated event.",
+      "report_name": "smbv1_targeted_activity",
+      "source_ip": "172.16.0.10"
+    }
+  ],
+  "detection_name": "Internal Host Recon/Lateral Movement - SMBv1 Scan",
+  "severity": 5
+}
+
+================================================================================
+EXECUTING RULE: Internal Host Recon - High Unique IP SYN Scan
+================================================================================
+
+1. Preparing Global Variables...
+   - {excluded_ips_list}: '10.0.0.1', '192.168.1.1'
+
+2. Loading SQL template and substituting variables...
+
+   --- Final SQL Query ---
+/*
+Name: Internal Host Recon - High Unique IP SYN Scan
+Description:
+  Detects an internal source IP performing a stealthy SYN scan against a high number of unique private IP addresses.
+  This indicates active reconnaissance to discover live hosts, likely from a compromised system or unauthorized activity.
+  Alerts on broad network mapping attempts.
+MITRE ATT&CK Mapping:
+  T1595.001 - Active Scanning: Scanning IP Blocks/Ranges: Directly relevant as it's scanning many unique IPs.
+Severity Score: 4
+Rationale:
+  High confidence of active reconnaissance. Could be legitimate (e.g., poorly configured internal scanner), but warrants investigation.
+  High unique IPs often points to deliberate scanning. Stealthy nature adds to suspicion. Could be a compromised host.
+*/
+SELECT
+    'syn_scan' AS report_name,
+    SrcIp,
+    count(DISTINCT DestIp) AS Unique_DestIPs_Scanned,
+    min(Timestamp) AS First_Scan_Attempt,
+    max(Timestamp) AS Last_Attempt,
+    format('Src {} performed stealthy SYN scan against {} unique internal IPs. Reconnaissance suspected.', SrcIp, toString(count(DISTINCT DestIp))) AS description,
+    'T1595.001' AS mitre_mapping,
+    4 AS severity_score,
+    arrayStringConcat(arraySlice(arraySort(groupUniqArray(DestIp || ':' || toString(DestPort))), 1, 10), ', ') AS Sample_Dest_IP_Ports_List
+FROM
+    dragonfly.dragonflyClusterScoresJoin
+WHERE
+    DestIpCategory = 'private'
+    AND Timestamp >= now() - toIntervalHour(1)
+    AND ClientToServerPacketCount = 1
+    AND ServerToClientPacketCount <= 1
+    AND ClientToServerTcpFlags = 2
+    AND (bitAnd(ServerToClientTcpFlags, 18) = 18 OR bitAnd(ServerToClientTcpFlags, 20) = 20 OR ServerToClientTcpFlags = 0)
+    AND ClientToServerDuration < 500
+    AND SrcIp NOT IN ('10.0.0.1', '192.168.1.1') -- Placeholder for global exclusion list (SYSLOG_IP, Management_IP)
+GROUP BY
+    SrcIp
+HAVING
+    count(DISTINCT DestIp) > 50
+ORDER BY
+    Unique_DestIPs_Scanned DESC
+LIMIT 50;
+
+   -----------------------
+
+3. Sending query to simulated ClickHouse client...
+
+4. Received simulated result:
+{
+  "detection_context": [
+    {
+      "SrcIp": "10.2.2.200",
+      "Unique_Dest_IPs": "123",
+      "description": "Src 10.2.2.200 performed a SYN scan...",
+      "report_name": "syn_scan"
+    }
+  ],
+  "detection_name": "Internal Host Recon - High Unique IP SYN Scan",
+  "severity": 4
+}
+
+================================================================================
+EXECUTING RULE: Internal Host Recon - UDP Application Scan
+================================================================================
+
+1. Preparing Global Variables...
+   - {excluded_ips_list}: '10.0.0.1', '192.168.1.1'
+
+2. Loading SQL template and substituting variables...
+
+   --- Final SQL Query ---
+/*
+Name: Internal Host Recon - UDP Application Scan
+Description:
+  Detects an internal source IP attempting to probe a high number of unique UDP ports on a destination,
+  specifically for known application protocols like DNS, NTP, or SSDP.
+  This indicates targeted reconnaissance against specific UDP services.
+MITRE ATT&CK Mapping:
+  T1046 - Network Service Discovery: Directly applicable, as the goal is to find active UDP services.
+Severity Score: 4
+Rationale:
+  UDP scans are less common than TCP scans in legitimate applications but are routinely used by attackers.
+  A high volume of UDP probes from an internal source is highly suspicious.
+*/
+SELECT
+    'udp_app_scan' AS report_name,
+    SrcIp,
+    DestIp,
+    MasterProtocol,
+    SubProtocol,
+    count(DISTINCT DestPort) AS Unique_DestPorts_Scanned,
+    min(Timestamp) AS First_Scan_Attempt,
+    max(Timestamp) AS Last_Attempt,
+    format('Src {} performed UDP scan against {} targeting {} unique ports for {} ({}). UDP service discovery suspected.', SrcIp, DestIp, toString(count(DISTINCT DestPort)), MasterProtocol, SubProtocol) AS description,
+    'T1046' AS mitre_mapping,
+    4 AS severity_score,
+    arrayStringConcat(arraySlice(arraySort(groupUniqArray(DestIp || ':' || toString(DestPort) || ':' || MasterProtocol || ':' || SubProtocol)), 1, 10), ', ') AS Sample_Dest_IP_Ports_List
+FROM
+    dragonfly.dragonflyClusterScoresJoin
+WHERE
+    DestIpCategory = 'private'
+    AND Timestamp >= now() - toIntervalHour(1)
+    AND Protocol = 'UDP'
+    AND ServerToClientPacketCount <= 1
+    AND ClientToServerDuration < 500
+    AND MasterProtocol IN ('DNS', 'NTP', 'SSDP', 'DHCP', 'DHCPV6')
+    AND SubProtocol != 'Unknown'
+    AND SrcIp NOT IN ('10.0.0.1', '192.168.1.1') -- Placeholder for global exclusion list (SYSLOG_IP, Management_IP)
+GROUP BY
+    SrcIp, DestIp, MasterProtocol, SubProtocol
+HAVING
+    count(DISTINCT DestPort) > 5
+ORDER BY
+    Unique_DestPorts_Scanned DESC
+LIMIT 50;
+
+   -----------------------
+
+3. Sending query to simulated ClickHouse client...
+
+4. Received simulated result:
+{
+  "detection_context": [
+    {
+      "details": "Generic simulated event.",
+      "report_name": "udp_app_scan",
+      "source_ip": "172.16.0.10"
+    }
+  ],
+  "detection_name": "Internal Host Recon - UDP Application Scan",
+  "severity": 4
+}
+
+Cleaning up...
+
+C:\Users\karlackerman\Documents\NDR_Detection_Classifiers\out\build\x64-Debug\detection_manager_test.exe (process 15344) exited with code 0 (0x0).
+Press any key to close this window . . .

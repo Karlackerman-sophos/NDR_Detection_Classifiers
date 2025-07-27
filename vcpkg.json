@@ -2,7 +2,7 @@
   "name": "ndr-detection-classifiers",
   "version-string": "1.0.0",
   "dependencies": [
-    "jansson",
+    "nlohmann-json",
     "libgit2"
   ]
 }

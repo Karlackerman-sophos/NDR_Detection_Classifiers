@@ -1,3 +1,0 @@
-C:/Users/karlackerman/Documents/NDR_Detection_Classifiers/out/build/x64-Debug/CMakeFiles/detection_manager_test.dir
-C:/Users/karlackerman/Documents/NDR_Detection_Classifiers/out/build/x64-Debug/CMakeFiles/edit_cache.dir
-C:/Users/karlackerman/Documents/NDR_Detection_Classifiers/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir

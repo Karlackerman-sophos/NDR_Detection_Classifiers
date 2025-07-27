@@ -1,0 +1,11 @@
+# Ignore Visual Studio user-specific files and cache
+.vs/
+
+# Ignore the build output directory
+out/
+
+# Ignore common build artifacts
+*.exe
+*.ilk
+*.pdb
+*.obj

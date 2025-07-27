@@ -6,9 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Define the project name and language.
 project(detection_manager_test CXX)
 
-# This is the modern vcpkg integration that should handle everything automatically,
-# but is not working correctly in your environment. We leave it here.
-find_package(Jansson REQUIRED)
+# Find the packages listed in vcpkg.json.
+find_package(nlohmann_json REQUIRED)
 find_package(libgit2 REQUIRED)
 
 # Add the executable target and its source files.
@@ -16,8 +15,7 @@ add_executable(${PROJECT_NAME}
     detection_manager.cpp
 )
 
-# --- Manual Workaround Starts Here ---
-
+# --- Manual Workaround for Environment Issues ---
 # 1. Manually tell CMake where to find header files (.h) for the compiler.
 target_include_directories(${PROJECT_NAME} PRIVATE
     "C:/Dev/vcpkg/installed/x64-windows/include"
@@ -27,14 +25,11 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 target_link_directories(${PROJECT_NAME} PRIVATE
     "C:/Dev/vcpkg/installed/x64-windows/lib"
 )
+# --- End Workaround ---
 
-# --- Manual Workaround Ends Here ---
-
-
-# Link the libraries by name. The linker will now find them
-# because of the target_link_directories command above.
+# Link the libraries by name.
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    jansson
+    nlohmann_json::nlohmann_json
     git2
 )
 
