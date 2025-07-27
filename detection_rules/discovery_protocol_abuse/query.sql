@@ -23,7 +23,8 @@ SELECT
     format('Src {} performed a high volume of {} queries (Sub: {}) against {} unique internal IPs. Discovery protocol abuse suspected.', SrcIp, MasterProtocol, SubProtocol, toString(count(DISTINCT DestIp))) AS description,
     'T1046' AS mitre_mapping,
     5 AS severity_score,
-    arrayStringConcat(arraySlice(arraySort(groupUniqArray(DestIp || ':' || toString(DestPort) || ':' || MasterProtocol || ':' || SubProtocol)), 1, 10), ', ') AS Sample_Dest_IP_Ports_List
+    arrayStringConcat(arraySlice(arraySort(groupUniqArray(DestIp || ':' || toString(DestPort) || ':' || MasterProtocol || ':' || SubProtocol)), 1, 10), ', ') AS Sample_Dest_IP_Ports_List,
+    SensorId
 FROM
     dragonfly.dragonflyClusterScoresJoin
 WHERE
@@ -35,7 +36,7 @@ WHERE
     AND SubProtocol != 'Unknown'
     AND SrcIp NOT IN ({excluded_ips_list}) -- Placeholder for global exclusion list (SYSLOG_IP, Management_IP)
 GROUP BY
-    SrcIp, MasterProtocol, SubProtocol
+    SrcIp, MasterProtocol, SubProtocol, SensorId
 HAVING
     count(DISTINCT DestIp) > 5
     OR count() > 20
