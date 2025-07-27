@@ -21,7 +21,8 @@ SELECT
     format('Src {} engaged in aggressive stealthy SYN scanning across {} IPs and {} ports, with {} total attempts. Automated reconnaissance suspected.', SrcIp, toString(count(DISTINCT DestIp)), toString(count(DISTINCT DestPort)), toString(count())) AS description,
     'T1595.001' AS mitre_mapping,
     5 AS severity_score,
-    arrayStringConcat(arraySlice(arraySort(groupUniqArray(DestIp || ':' || toString(DestPort))), 1, 10), ', ') AS Sample_Dest_IP_Ports_List
+    arrayStringConcat(arraySlice(arraySort(groupUniqArray(DestIp || ':' || toString(DestPort))), 1, 10), ', ') AS Sample_Dest_IP_Ports_List,
+    SensorId
 FROM
     dragonfly.dragonflyClusterScoresJoin
 WHERE
@@ -34,7 +35,7 @@ WHERE
     AND ClientToServerDuration < 500
     AND SrcIp NOT IN ({excluded_ips_list})
 GROUP BY
-    SrcIp
+    SrcIp, SensorId
 HAVING
     count(DISTINCT DestIp) > 20
     AND count(DISTINCT DestPort) > 5
