@@ -23,7 +23,8 @@ SELECT
     format('Src {} performed UDP scan against {} targeting {} unique ports for {} ({}). UDP service discovery suspected.', SrcIp, DestIp, toString(count(DISTINCT DestPort)), MasterProtocol, SubProtocol) AS description,
     'T1046' AS mitre_mapping,
     4 AS severity_score,
-    arrayStringConcat(arraySlice(arraySort(groupUniqArray(DestIp || ':' || toString(DestPort) || ':' || MasterProtocol || ':' || SubProtocol)), 1, 10), ', ') AS Sample_Dest_IP_Ports_List
+    arrayStringConcat(arraySlice(arraySort(groupUniqArray(DestIp || ':' || toString(DestPort) || ':' || MasterProtocol || ':' || SubProtocol)), 1, 10), ', ') AS Sample_Dest_IP_Ports_List,
+    SensorId
 FROM
     dragonfly.dragonflyClusterScoresJoin
 WHERE
@@ -36,7 +37,7 @@ WHERE
     AND SubProtocol != 'Unknown'
     AND SrcIp NOT IN ({excluded_ips_list}) -- Placeholder for global exclusion list (SYSLOG_IP, Management_IP)
 GROUP BY
-    SrcIp, DestIp, MasterProtocol, SubProtocol
+    SrcIp, DestIp, MasterProtocol, SubProtocol, SensorId
 HAVING
     count(DISTINCT DestPort) > 5
 ORDER BY
