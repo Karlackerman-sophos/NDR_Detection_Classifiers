@@ -22,7 +22,8 @@ SELECT
     format('Src {} made {} attempts to {} using highly vulnerable SMBv1 protocol. Possible exploitation or lateral movement.', SrcIp, toString(count()), DestIp) AS description,
     'T1210' AS mitre_mapping,
     5 AS severity_score,
-    arrayStringConcat(arraySlice(arraySort(groupUniqArray(DestIp || ':' || toString(DestPort) || ':' || MasterProtocol || ':' || SubProtocol)), 1, 10), ', ') AS Sample_Dest_IP_Ports_List
+    arrayStringConcat(arraySlice(arraySort(groupUniqArray(DestIp || ':' || toString(DestPort) || ':' || MasterProtocol || ':' || SubProtocol)), 1, 10), ', ') AS Sample_Dest_IP_Ports_List,
+    SensorId
 FROM
     dragonfly.dragonflyClusterScoresJoin
 WHERE
@@ -34,7 +35,7 @@ WHERE
     )
     AND SrcIp NOT IN ({excluded_ips_list}) -- Placeholder for global exclusion list (SYSLOG_IP, Management_IP)
 GROUP BY
-    SrcIp, DestIp, MasterProtocol, SubProtocol
+    SrcIp, DestIp, MasterProtocol, SubProtocol, SensorId
 HAVING
     count() > 50
 ORDER BY
