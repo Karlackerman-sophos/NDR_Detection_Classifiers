@@ -194,26 +194,24 @@ std::string capitalizeAndSpace(std::string s) {
 
 void DetectionManager::PrintRulesSummary() {
     std::cout << "\n--- Detection Rules Detailed Summary ---\n";
-    const int label_width = 32;
-    for (const auto& rule : loaded_rules) {
-        std::cout << "\n" << std::string(80, '=') << "\n"; // Use '=' for a more prominent separator
-        std::cout << "RULE ID: " << rule.id << "\n"; // Prominent Rule ID header
-        std::cout << std::string(80, '-') << "\n"; // Separator below the ID
+    const int label_width = 22; // Width for the label column
+    const int padding_after_label = 2; // Additional spaces between label and value
 
-        // Iterate and print all key-value pairs from raw_metadata
+    for (const auto& rule : loaded_rules) {
+        std::cout << "\n" << std::string(80, '=') << "\n";
+        std::cout << "RULE ID: " << rule.id << "\n";
+        std::cout << std::string(80, '-') << "\n";
+
         if (rule.raw_metadata.is_object()) {
             for (json::const_iterator it = rule.raw_metadata.begin(); it != rule.raw_metadata.end(); ++it) {
-                // Skip description as it's handled separately for wrapping
                 if (it.key() == "description") continue;
-                // Skip 'id' here as it's already printed as a header
-                if (it.key() == "id") continue;
+                if (it.key() == "id") continue; // Already printed as a header
 
-                // Capitalize first letter and replace underscores for display
                 std::string display_key = capitalizeAndSpace(it.key());
 
-                std::cout << std::left << std::setw(label_width) << display_key + ":" ;
+                std::cout << std::left << std::setw(label_width) << display_key + ":";
+                std::cout << std::string(padding_after_label, ' '); // Add explicit padding
 
-                // Handle different JSON value types for printing
                 if (it->is_boolean()) {
                     std::cout << (it->get<bool>() ? "true" : "false") << "\n";
                 } else if (it->is_number()) {
@@ -227,21 +225,21 @@ void DetectionManager::PrintRulesSummary() {
         } else {
             // Fallback for displaying if raw_metadata isn't used or is invalid
             // (This block is less likely to be hit with raw_metadata implemented)
-            std::cout << std::left << std::setw(label_width) << "Name:" << rule.name << "\n";
-            std::cout << std::left << std::setw(label_width) << "Enabled:" << (rule.enabled ? "true" : "false") << "\n";
-            std::cout << std::left << std::setw(label_width) << "Type:" << rule.type << "\n";
-            std::cout << std::left << std::setw(label_width) << "Monitor Mode:" << rule.monitor_mode << "\n";
-            std::cout << std::left << std::setw(label_width) << "Frequency (seconds):" << rule.frequency_seconds << "\n";
-            std::cout << std::left << std::setw(label_width) << "Default Severity:" << rule.severity_score_default << "\n";
-            std::cout << std::left << std::setw(label_width) << "MITRE Attack Mapping:" << rule.mitre_attack_mapping << "\n";
-            std::cout << std::left << std::setw(label_width) << "Execution Device:" << rule.execution_device << "\n";
-            std::cout << std::left << std::setw(label_width) << "Min NDR Version:" << rule.min_ndr_version << "\n";
-            std::cout << std::left << std::setw(label_width) << "Apply Global IP Excl:" << (rule.apply_global_ip_exclusions ? "true" : "false") << "\n";
+            std::cout << std::left << std::setw(label_width) << "Name:" << std::string(padding_after_label, ' ') << rule.name << "\n";
+            std::cout << std::left << std::setw(label_width) << "Enabled:" << std::string(padding_after_label, ' ') << (rule.enabled ? "true" : "false") << "\n";
+            std::cout << std::left << std::setw(label_width) << "Type:" << std::string(padding_after_label, ' ') << rule.type << "\n";
+            std::cout << std::left << std::setw(label_width) << "Monitor Mode:" << std::string(padding_after_label, ' ') << rule.monitor_mode << "\n";
+            std::cout << std::left << std::setw(label_width) << "Frequency (seconds):" << std::string(padding_after_label, ' ') << rule.frequency_seconds << "\n";
+            std::cout << std::left << std::setw(label_width) << "Default Severity:" << std::string(padding_after_label, ' ') << rule.severity_score_default << "\n";
+            std::cout << std::left << std::setw(label_width) << "MITRE Attack Mapping:" << std::string(padding_after_label, ' ') << rule.mitre_attack_mapping << "\n";
+            std::cout << std::left << std::setw(label_width) << "Execution Device:" << std::string(padding_after_label, ' ') << rule.execution_device << "\n";
+            std::cout << std::left << std::setw(label_width) << "Min NDR Version:" << std::string(padding_after_label, ' ') << rule.min_ndr_version << "\n";
+            std::cout << std::left << std::setw(label_width) << "Apply Global IP Excl:" << std::string(padding_after_label, ' ') << (rule.apply_global_ip_exclusions ? "true" : "false") << "\n";
         }
-
+        
         // Always explicitly print description with wrapping at the end
         std::cout << std::left << std::setw(label_width) << "Description:";
-        std::cout << wrap_text(rule.description, 60, std::string(label_width, ' ')) << "\n";
+        std::cout << wrap_text(rule.description, 60, std::string(label_width + padding_after_label, ' ')) << "\n";
     }
     std::cout << std::string(80, '-') << "\n";
     std::cout << "\nTotal rules loaded: " << loaded_rules.size() << "\n";
@@ -371,12 +369,33 @@ bool DetectionManager::discoverAndLoadRules() {
         if (entry.is_directory()) {
             LoadedDetectionRule rule;
             rule.id = entry.path().filename().string(); // Set ID from directory name first
-            if (loadMetadataForRule((entry.path() / "metadata.json").string(), rule)) {
-                rule.sql_query_template = loadSqlQueryFile((entry.path() / "query.sql").string());
-                if (!rule.sql_query_template.empty()) {
-                    loaded_rules.push_back(rule);
-                }
+
+            std::string metadata_path = (entry.path() / "metadata.json").string();
+            std::string query_path = (entry.path() / "query.sql").string();
+
+            if (!std::filesystem::exists(metadata_path)) {
+                std::cerr << "Warning: Skipping rule '" << rule.id << "'. Missing metadata.json at: " << metadata_path << std::endl;
+                continue;
             }
+
+            if (!loadMetadataForRule(metadata_path, rule)) {
+                // loadMetadataForRule already prints an error if parsing fails
+                std::cerr << "Warning: Skipping rule '" << rule.id << "'. Failed to load or parse metadata from: " << metadata_path << std::endl;
+                continue;
+            }
+            
+            if (!std::filesystem::exists(query_path)) {
+                std::cerr << "Warning: Skipping rule '" << rule.id << "'. Missing query.sql at: " << query_path << std::endl;
+                continue;
+            }
+
+            rule.sql_query_template = loadSqlQueryFile(query_path);
+            if (rule.sql_query_template.empty()) {
+                std::cerr << "Warning: Skipping rule '" << rule.id << "'. Query file is empty or could not be read from: " << query_path << std::endl;
+                continue;
+            }
+            
+            loaded_rules.push_back(rule);
         }
     }
     return !loaded_rules.empty();
