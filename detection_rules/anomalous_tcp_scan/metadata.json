@@ -3,6 +3,7 @@
   "name": "Internal Host Recon - Anomalous TCP Flag Scan",
   "description": "Detects an internal source IP sending probes with highly unusual TCP flag combinations (e.g., FIN, NULL, Xmas, or pure ACK). This often indicates an advanced reconnaissance attempt designed to evade detection or map firewalls.",
   "enabled": true,
+  "type": "Scheduled",
   "frequency_seconds": 3600,
   "monitor_mode": 1,
   "execution_device": "NDR_Sensor",
