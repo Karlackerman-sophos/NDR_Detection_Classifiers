@@ -194,7 +194,7 @@ std::string capitalizeAndSpace(std::string s) {
 
 void DetectionManager::PrintRulesSummary() {
     std::cout << "\n--- Detection Rules Detailed Summary ---\n";
-    const int label_width = 22;
+    const int label_width = 32;
     for (const auto& rule : loaded_rules) {
         std::cout << "\n" << std::string(80, '=') << "\n"; // Use '=' for a more prominent separator
         std::cout << "RULE ID: " << rule.id << "\n"; // Prominent Rule ID header
