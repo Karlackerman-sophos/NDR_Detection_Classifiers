@@ -194,7 +194,7 @@ std::string capitalizeAndSpace(std::string s) {
 
 void DetectionManager::PrintRulesSummary() {
     std::cout << "\n--- Detection Rules Detailed Summary ---\n";
-    const int label_width = 30 // Width for the label column
+    const int label_width = 30; // Width for the label column
     const int padding_after_label = 2; // Additional spaces between label and value
 
     for (const auto& rule : loaded_rules) {
