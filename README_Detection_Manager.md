@@ -9,8 +9,7 @@ This project is a C++ application designed to act as a test harness for a set of
 * Displays a detailed, multi-line summary of all loaded rules. 
 * Simulates the execution of each rule with verbose output, showing variable substitution and the final SQL query. 
 * Uses **CMake** for building and **`vcpkg`** (in manifest mode) for dependency management. 
-* Configured for a **dynamically linked** build, with a post-build step to automatically copy required DLLs. 
-
+* Configured for a **dynamically linked** build
 ---
 ## Prerequisites
 
