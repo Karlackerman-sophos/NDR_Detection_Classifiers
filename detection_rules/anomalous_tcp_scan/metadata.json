@@ -10,5 +10,6 @@
   "min_ndr_version": "1.10.1-3063",
   "mitre_attack_mapping": "T1595.002",
   "severity_score_default": 5,
-  "apply_global_ip_exclusions": false
+  "apply_global_ip_exclusions": true,
+  "Extra_Entry": "This is an extra JSON field included for testing only"
 }
