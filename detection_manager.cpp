@@ -215,9 +215,19 @@ void DetectionManager::RunSingleRule(const LoadedDetectionRule& rule) {
     std::string excluded_ips = constructExcludedIpsList(config->config_map.at("SYSLOG_IP_STR"), config->config_map.at("MANAGEMENT_IP_STR"));
     std::cout << "   - {excluded_ips_list}: " << excluded_ips << "\n\n";
 
-    std::cout << "2. Loading SQL template and substituting variables...\n";
+   std::cout << "2. Loading SQL template and substituting variables...\n";
     std::string final_sql = rule.sql_query_template;
-    replaceAll(final_sql, "{excluded_ips_list}", excluded_ips);
+
+    // FIX: Conditionally apply global IP exclusions based on the rule's metadata
+    if (rule.apply_global_ip_exclusions) {
+        replaceAll(final_sql, "{excluded_ips_list}", excluded_ips);
+    } else {
+        // If exclusions should not be applied, remove the placeholder
+        // or replace it with an empty string/dummy true condition
+        replaceAll(final_sql, "AND SrcIp NOT IN ({excluded_ips_list})", ""); // Remove the entire clause
+        // Alternatively, if the placeholder MUST be present, but empty:
+        // replaceAll(final_sql, "{excluded_ips_list}", "''"); // Or some other empty set that doesn't filter
+    }
 
     std::cout << "\n   --- Final SQL Query ---\n" << final_sql << "\n   -----------------------\n\n";
 
