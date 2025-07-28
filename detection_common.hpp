@@ -14,6 +14,7 @@ struct LoadedDetectionRule {
     std::string name;
     std::string description;
     bool enabled{ false };
+    std::string type;
     int frequency_seconds{ 86400 };
     int monitor_mode{ 1 };
     std::string mitre_attack_mapping;
