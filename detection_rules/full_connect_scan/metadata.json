@@ -3,6 +3,7 @@
   "name": "Internal Host Recon - Full-Connect Application Scan",
   "description": "Identifies an internal source IP establishing a high number of full TCP connections to unique internal IP addresses or unique ports, where an application-layer protocol is identified. This suggests a full-connect scan targeting specific services.",
   "enabled": true,
+  "type": "Scheduled",
   "frequency_seconds": 3600,
   "monitor_mode": 1,
   "execution_device": "NDR_Sensor",
