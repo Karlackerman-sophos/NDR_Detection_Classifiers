@@ -196,32 +196,37 @@ void DetectionManager::PrintRulesSummary() {
     std::cout << "\n--- Detection Rules Detailed Summary ---\n";
     const int label_width = 22;
     for (const auto& rule : loaded_rules) {
-        std::cout << "\n" << std::string(80, '-') << "\n";
-        // Iterate and print all key-value pairs from raw_metadata if it exists
+        std::cout << "\n" << std::string(80, '=') << "\n"; // Use '=' for a more prominent separator
+        std::cout << "RULE ID: " << rule.id << "\n"; // Prominent Rule ID header
+        std::cout << std::string(80, '-') << "\n"; // Separator below the ID
+
+        // Iterate and print all key-value pairs from raw_metadata
         if (rule.raw_metadata.is_object()) {
             for (json::const_iterator it = rule.raw_metadata.begin(); it != rule.raw_metadata.end(); ++it) {
                 // Skip description as it's handled separately for wrapping
                 if (it.key() == "description") continue;
+                // Skip 'id' here as it's already printed as a header
+                if (it.key() == "id") continue;
 
                 // Capitalize first letter and replace underscores for display
                 std::string display_key = capitalizeAndSpace(it.key());
 
-                std::cout << std::left << std::setw(label_width) << display_key + ":";
+                std::cout << std::left << std::setw(label_width) << display_key + ":" ;
 
                 // Handle different JSON value types for printing
                 if (it->is_boolean()) {
                     std::cout << (it->get<bool>() ? "true" : "false") << "\n";
                 } else if (it->is_number()) {
-                    std::cout << it->dump() << "\n"; // dump() handles numbers correctly
+                    std::cout << it->dump() << "\n";
                 } else if (it->is_string()) {
                     std::cout << it->get<std::string>() << "\n";
                 } else {
-                    std::cout << it->dump() << "\n"; // Fallback for other types (objects, arrays)
+                    std::cout << it->dump() << "\n";
                 }
             }
         } else {
             // Fallback for displaying if raw_metadata isn't used or is invalid
-            std::cout << std::left << std::setw(label_width) << "ID:" << rule.id << "\n";
+            // (This block is less likely to be hit with raw_metadata implemented)
             std::cout << std::left << std::setw(label_width) << "Name:" << rule.name << "\n";
             std::cout << std::left << std::setw(label_width) << "Enabled:" << (rule.enabled ? "true" : "false") << "\n";
             std::cout << std::left << std::setw(label_width) << "Type:" << rule.type << "\n";
@@ -233,7 +238,7 @@ void DetectionManager::PrintRulesSummary() {
             std::cout << std::left << std::setw(label_width) << "Min NDR Version:" << rule.min_ndr_version << "\n";
             std::cout << std::left << std::setw(label_width) << "Apply Global IP Excl:" << (rule.apply_global_ip_exclusions ? "true" : "false") << "\n";
         }
-        
+
         // Always explicitly print description with wrapping at the end
         std::cout << std::left << std::setw(label_width) << "Description:";
         std::cout << wrap_text(rule.description, 60, std::string(label_width, ' ')) << "\n";
