@@ -1,7 +1,10 @@
 Initializing DetectionManager...
-Cloning https://github.com/Karlackerman-sophos/NDR_Detection_Classifiers branch 'sophos-internal' to C:\Users\karlackerman\AppData\Local\Temp\ndr_repo_1753712639
+Cloning https://github.com/Karlackerman-sophos/NDR_Detection_Classifiers branch 'sophos-internal' to C:\Users\karlackerman\AppData\Local\Temp\ndr_repo_1753713839
 Successfully cloned repository.
-Searching for rules in: C:\Users\karlackerman\AppData\Local\Temp\ndr_repo_1753712639\detection_rules/
+Searching for rules in: C:\Users\karlackerman\AppData\Local\Temp\ndr_repo_1753713839\detection_rules/
+Warning: Skipping rule 'meta only'. Missing query.sql at: C:\Users\karlackerman\AppData\Local\Temp\ndr_repo_1753713839\detection_rules/InvalidFileStruc\query.sql
+Warning: Skipping rule 'invalid_JSON'. Missing metadata.json at: C:\Users\karlackerman\AppData\Local\Temp\ndr_repo_1753713839\detection_rules/invalid_JSON\metadata.json
+Warning: Skipping rule 'Missingmeta'. Missing metadata.json at: C:\Users\karlackerman\AppData\Local\Temp\ndr_repo_1753713839\detection_rules/Missingmeta\metadata.json
 
 --- Detection Rules Detailed Summary ---
 
@@ -18,7 +21,7 @@ Monitor mode:                   1
 Name:                           Internal Host Recon - Aggressive Multi-Target/Multi-Port Scan
 Severity score default:         5
 Type:                           Scheduled
-Description:                    Detects an internal source IP engaging in highly aggressive
+Description:                  Detects an internal source IP engaging in highly aggressive
                                 and broad reconnaissance. This involves simultaneous
                                 scanning of many unique IP addresses and many unique ports
                                 using stealthy SYN probes, indicative of automated malicious
@@ -38,7 +41,7 @@ Monitor mode:                   1
 Name:                           Internal Host Recon - Anomalous TCP Flag Scan
 Severity score default:         5
 Type:                           Scheduled
-Description:                    Detects an internal source IP sending probes with highly
+Description:                  Detects an internal source IP sending probes with highly
                                 unusual TCP flag combinations (e.g., FIN, NULL, Xmas, or
                                 pure ACK). This often indicates an advanced reconnaissance
                                 attempt designed to evade detection or map firewalls.
@@ -56,7 +59,7 @@ Monitor mode:                   1
 Name:                           Internal Host Recon - Database/API Protocol Scan
 Severity score default:         4
 Type:                           Scheduled
-Description:                    Detects scanning or connection attempts targeting common
+Description:                  Detects scanning or connection attempts targeting common
                                 database or API protocols (e.g., Redis, MongoDB, MSSQL_TDS,
                                 MySQL, Oracle, Postgres, DRDA, Cassandra, Elasticsearch,
                                 JSON-RPC, Protobuf, WebDAV, AMQP, Memcached, Z3950). This
@@ -77,7 +80,7 @@ Monitor mode:                   1
 Name:                           Internal Host Recon - Discovery Protocol Abuse
 Severity score default:         5
 Type:                           Scheduled
-Description:                    Identifies an internal source IP querying multiple unique
+Description:                  Identifies an internal source IP querying multiple unique
                                 hosts or a high volume of traffic related to typically
                                 benign discovery protocols (LLMNR, MDNS, SSDP, WSD, NATPMP,
                                 SLP). This can indicate an attacker attempting to enumerate
@@ -97,7 +100,7 @@ Monitor mode:                   1
 Name:                           Internal Host Activity - Established SMBv1 Connection
 Severity score default:         5
 Type:                           Scheduled
-Description:                    Detects actual established TCP connections utilizing the
+Description:                  Detects actual established TCP connections utilizing the
                                 highly vulnerable SMBv1 protocol. This is a critical alert,
                                 as a confirmed connection to an SMBv1 service implies
                                 successful interaction and is a strong indicator of active
@@ -116,7 +119,7 @@ Monitor mode:                   1
 Name:                           Internal Host Recon - Full-Connect Application Scan
 Severity score default:         3
 Type:                           Scheduled
-Description:                    Identifies an internal source IP establishing a high number
+Description:                  Identifies an internal source IP establishing a high number
                                 of full TCP connections to unique internal IP addresses or
                                 unique ports, where an application-layer protocol is
                                 identified. This suggests a full-connect scan targeting
@@ -135,7 +138,7 @@ Monitor mode:                   1
 Name:                           Internal Host Recon/Compromise - ICS/Management Protocol Scan
 Severity score default:         5
 Type:                           Scheduled
-Description:                    Detects scanning or connection attempts targeting highly
+Description:                  Detects scanning or connection attempts targeting highly
                                 sensitive Industrial Control System (ICS) or out-of-band
                                 management protocols (IPMI, MMS, PROFINET_IO, EtherNet/IP,
                                 S7COMM, DNP3, IEC60870). Any activity related to these
@@ -155,7 +158,7 @@ Monitor mode:                   1
 Name:                           Internal Host Recon - IP Protocol Scan
 Severity score default:         4
 Type:                           Scheduled
-Description:                    Detects an internal source IP attempting to discover which
+Description:                  Detects an internal source IP attempting to discover which
                                 IP protocols (e.g., TCP, UDP, ICMP, IGMP) are supported by
                                 target hosts by sending probes with many different IP
                                 protocol numbers.
@@ -173,7 +176,7 @@ Monitor mode:                   1
 Name:                           Internal Host Recon - Target Port Sweep
 Severity score default:         4
 Type:                           Scheduled
-Description:                    Identifies an internal source IP performing a stealthy SYN
+Description:                  Identifies an internal source IP performing a stealthy SYN
                                 scan against a high number of unique ports on a single
                                 destination IP. This suggests targeted reconnaissance to
                                 identify open services and potential vulnerabilities on a
@@ -192,7 +195,7 @@ Monitor mode:                   1
 Name:                           Internal Host Recon/Lateral Movement - SMBv1 Scan
 Severity score default:         5
 Type:                           Scheduled
-Description:                    Detects attempts from an internal source IP to connect to or
+Description:                  Detects attempts from an internal source IP to connect to or
                                 scan for SMBv1 services. SMBv1 is a deprecated and highly
                                 vulnerable protocol, and any active use from a
                                 non-authorized host is a critical security concern, often
@@ -212,7 +215,7 @@ Monitor mode:                   1
 Name:                           Internal Host Recon - High Unique IP SYN Scan
 Severity score default:         4
 Type:                           Scheduled
-Description:                    Detects an internal source IP performing a stealthy SYN scan
+Description:                  Detects an internal source IP performing a stealthy SYN scan
                                 against a high number of unique private IP addresses. This
                                 indicates active reconnaissance to discover live hosts,
                                 likely from a compromised system or unauthorized activity.
@@ -231,7 +234,7 @@ Monitor mode:                   1
 Name:                           Internal Host Recon - UDP Application Scan
 Severity score default:         4
 Type:                           Scheduled
-Description:                    Detects an internal source IP attempting to probe a high
+Description:                  Detects an internal source IP attempting to probe a high
                                 number of unique UDP ports on a destination, specifically
                                 for known application protocols like DNS, NTP, or SSDP. This
                                 indicates targeted reconnaissance against specific UDP
@@ -1051,5 +1054,5 @@ LIMIT 50;
 
 Cleaning up...
 
-C:\Users\karlackerman\Documents\NDR_Detection_Classifiers\out\build\x64-Debug\detection_manager_test.exe (process 22388) exited with code 0 (0x0).
+C:\Users\karlackerman\Documents\NDR_Detection_Classifiers\out\build\x64-Debug\detection_manager_test.exe (process 13648) exited with code 0 (0x0).
 Press any key to close this window . . .
