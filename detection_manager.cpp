@@ -10,6 +10,7 @@
 #include <ctime>
 #include <filesystem>
 #include <utility>
+#include <algorithm> // For std::replace in capitalizeFirstLetter
 
 // Use a type alias for convenience
 using json = nlohmann::json;
@@ -132,7 +133,7 @@ namespace GitHelper {
         return true;
     }
 }
-#endif
+#endif // PRODUCTION_BUILD
 
 DetectionManager::DetectionManager(detection_configuration_t* _config) : config(_config), clickhouse_client(nullptr) {
     auto it = config->config_map.find("GIT_RULES_PATH_VAR");
@@ -182,22 +183,85 @@ std::string wrap_text(const std::string& text, unsigned int line_width, const st
     return wrapped_text.str();
 }
 
+// Helper to capitalize first letter and replace underscores for display
+std::string capitalizeAndSpace(std::string s) {
+    if (!s.empty()) {
+        s[0] = static_cast<char>(std::toupper(s[0]));
+    }
+    std::replace(s.begin(), s.end(), '_', ' ');
+    return s;
+}
+
+void DetectionManager::PrintRulesSummary() {
+    std::cout << "\n--- Detection Rules Detailed Summary ---\n";
+    const int label_width = 22;
+    for (const auto& rule : loaded_rules) {
+        std::cout << "\n" << std::string(80, '-') << "\n";
+        // Iterate and print all key-value pairs from raw_metadata if it exists
+        if (rule.raw_metadata.is_object()) {
+            for (json::const_iterator it = rule.raw_metadata.begin(); it != rule.raw_metadata.end(); ++it) {
+                // Skip description as it's handled separately for wrapping
+                if (it.key() == "description") continue;
+
+                // Capitalize first letter and replace underscores for display
+                std::string display_key = capitalizeAndSpace(it.key());
+
+                std::cout << std::left << std::setw(label_width) << display_key + ":";
+
+                // Handle different JSON value types for printing
+                if (it->is_boolean()) {
+                    std::cout << (it->get<bool>() ? "true" : "false") << "\n";
+                } else if (it->is_number()) {
+                    std::cout << it->dump() << "\n"; // dump() handles numbers correctly
+                } else if (it->is_string()) {
+                    std::cout << it->get<std::string>() << "\n";
+                } else {
+                    std::cout << it->dump() << "\n"; // Fallback for other types (objects, arrays)
+                }
+            }
+        } else {
+            // Fallback for displaying if raw_metadata isn't used or is invalid
+            std::cout << std::left << std::setw(label_width) << "ID:" << rule.id << "\n";
+            std::cout << std::left << std::setw(label_width) << "Name:" << rule.name << "\n";
+            std::cout << std::left << std::setw(label_width) << "Enabled:" << (rule.enabled ? "true" : "false") << "\n";
+            std::cout << std::left << std::setw(label_width) << "Type:" << rule.type << "\n";
+            std::cout << std::left << std::setw(label_width) << "Monitor Mode:" << rule.monitor_mode << "\n";
+            std::cout << std::left << std::setw(label_width) << "Frequency (seconds):" << rule.frequency_seconds << "\n";
+            std::cout << std::left << std::setw(label_width) << "Default Severity:" << rule.severity_score_default << "\n";
+            std::cout << std::left << std::setw(label_width) << "MITRE Attack Mapping:" << rule.mitre_attack_mapping << "\n";
+            std::cout << std::left << std::setw(label_width) << "Execution Device:" << rule.execution_device << "\n";
+            std::cout << std::left << std::setw(label_width) << "Min NDR Version:" << rule.min_ndr_version << "\n";
+            std::cout << std::left << std::setw(label_width) << "Apply Global IP Excl:" << (rule.apply_global_ip_exclusions ? "true" : "false") << "\n";
+        }
+        
+        // Always explicitly print description with wrapping at the end
+        std::cout << std::left << std::setw(label_width) << "Description:";
+        std::cout << wrap_text(rule.description, 60, std::string(label_width, ' ')) << "\n";
+    }
+    std::cout << std::string(80, '-') << "\n";
+    std::cout << "\nTotal rules loaded: " << loaded_rules.size() << "\n";
+}
+
 bool DetectionManager::loadMetadataForRule(const std::string& path, LoadedDetectionRule& rule) {
     try {
         std::ifstream file(path);
         if (!file.is_open()) { return false; }
         json data = json::parse(file);
+        rule.raw_metadata = data; // Store the entire JSON object
+
+        // Parse specific fields needed for direct logic/access and display
+        rule.id = data.value("id", rule.id); // Ensure ID is set, potentially from metadata if not from dir name
         rule.name = data.value("name", "Unknown Name");
         rule.description = data.value("description", "");
         rule.enabled = data.value("enabled", true);
-        rule.type = data.value("enabled", true);
+        rule.type = data.value("type", "Unknown Type"); // Corrected this line
         rule.monitor_mode = data.value("monitor_mode", 0);
         rule.frequency_seconds = data.value("frequency_seconds", 3600);
         rule.severity_score_default = data.value("severity_score_default", 3);
         rule.mitre_attack_mapping = data.value("mitre_attack_mapping", "");
-        rule.apply_global_ip_exclusions = data.value("apply_global_ip_exclusions", true); // Ensure this is parsed
-        rule.execution_device = data.value("execution_device", ""); // Parse new field
-        rule.min_ndr_version = data.value("min_ndr_version", "");   // Parse new field
+        rule.apply_global_ip_exclusions = data.value("apply_global_ip_exclusions", true);
+        rule.execution_device = data.value("execution_device", "");
+        rule.min_ndr_version = data.value("min_ndr_version", "");
         return true;
     }
     catch (const std::exception& e) {
@@ -220,18 +284,15 @@ void DetectionManager::RunSingleRule(const LoadedDetectionRule& rule) {
     std::string excluded_ips = constructExcludedIpsList(config->config_map.at("SYSLOG_IP_STR"), config->config_map.at("MANAGEMENT_IP_STR"));
     std::cout << "   - {excluded_ips_list}: " << excluded_ips << "\n\n";
 
-   std::cout << "2. Loading SQL template and substituting variables...\n";
+    std::cout << "2. Loading SQL template and substituting variables...\n";
     std::string final_sql = rule.sql_query_template;
 
-    // FIX: Conditionally apply global IP exclusions based on the rule's metadata
+    // Conditionally apply global IP exclusions based on the rule's metadata
     if (rule.apply_global_ip_exclusions) {
         replaceAll(final_sql, "{excluded_ips_list}", excluded_ips);
     } else {
-        // If exclusions should not be applied, remove the placeholder
-        // or replace it with an empty string/dummy true condition
-        replaceAll(final_sql, "AND SrcIp NOT IN ({excluded_ips_list})", ""); // Remove the entire clause
-        // Alternatively, if the placeholder MUST be present, but empty:
-        // replaceAll(final_sql, "{excluded_ips_list}", "''"); // Or some other empty set that doesn't filter
+        // If exclusions should not be applied, remove the entire placeholder clause
+        replaceAll(final_sql, "AND SrcIp NOT IN ({excluded_ips_list})", "");
     }
 
     std::cout << "\n   --- Final SQL Query ---\n" << final_sql << "\n   -----------------------\n\n";
@@ -304,7 +365,7 @@ bool DetectionManager::discoverAndLoadRules() {
     for (const auto& entry : std::filesystem::directory_iterator(rules_path)) {
         if (entry.is_directory()) {
             LoadedDetectionRule rule;
-            rule.id = entry.path().filename().string();
+            rule.id = entry.path().filename().string(); // Set ID from directory name first
             if (loadMetadataForRule((entry.path() / "metadata.json").string(), rule)) {
                 rule.sql_query_template = loadSqlQueryFile((entry.path() / "query.sql").string());
                 if (!rule.sql_query_template.empty()) {
@@ -314,26 +375,6 @@ bool DetectionManager::discoverAndLoadRules() {
         }
     }
     return !loaded_rules.empty();
-}
-
-bool DetectionManager::loadMetadataForRule(const std::string& path, LoadedDetectionRule& rule) {
-    try {
-        std::ifstream file(path);
-        if (!file.is_open()) { return false; }
-        json data = json::parse(file);
-        rule.name = data.value("name", "Unknown Name");
-        rule.description = data.value("description", "");
-        rule.enabled = data.value("enabled", true);
-        rule.monitor_mode = data.value("monitor_mode", 0);
-        rule.frequency_seconds = data.value("frequency_seconds", 3600);
-        rule.severity_score_default = data.value("severity_score_default", 3);
-        rule.mitre_attack_mapping = data.value("mitre_attack_mapping", "");
-        return true;
-    }
-    catch (const std::exception& e) {
-        std::cerr << "Error loading metadata from " << path << ": " << e.what() << std::endl;
-        return false;
-    }
 }
 
 std::string DetectionManager::loadSqlQueryFile(const std::string& path) {
