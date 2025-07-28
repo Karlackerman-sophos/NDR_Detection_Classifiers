@@ -182,23 +182,28 @@ std::string wrap_text(const std::string& text, unsigned int line_width, const st
     return wrapped_text.str();
 }
 
-void DetectionManager::PrintRulesSummary() {
-    std::cout << "\n--- Detection Rules Detailed Summary ---\n";
-    const int label_width = 22;
-    for (const auto& rule : loaded_rules) {
-        std::cout << "\n" << std::string(80, '-') << "\n";
-        std::cout << std::left << std::setw(label_width) << "ID:" << rule.id << "\n";
-        std::cout << std::left << std::setw(label_width) << "Name:" << rule.name << "\n";
-        std::cout << std::left << std::setw(label_width) << "Enabled:" << (rule.enabled ? "true" : "false") << "\n";
-        std::cout << std::left << std::setw(label_width) << "Monitor Mode:" << rule.monitor_mode << "\n";
-        std::cout << std::left << std::setw(label_width) << "Frequency (seconds):" << rule.frequency_seconds << "\n";
-        std::cout << std::left << std::setw(label_width) << "Default Severity:" << rule.severity_score_default << "\n";
-        std::cout << std::left << std::setw(label_width) << "MITRE Attack Mapping:" << rule.mitre_attack_mapping << "\n";
-        std::cout << std::left << std::setw(label_width) << "Description:";
-        std::cout << wrap_text(rule.description, 60, std::string(label_width, ' ')) << "\n";
+bool DetectionManager::loadMetadataForRule(const std::string& path, LoadedDetectionRule& rule) {
+    try {
+        std::ifstream file(path);
+        if (!file.is_open()) { return false; }
+        json data = json::parse(file);
+        rule.name = data.value("name", "Unknown Name");
+        rule.description = data.value("description", "");
+        rule.enabled = data.value("enabled", true);
+        rule.type = data.value("enabled", true);
+        rule.monitor_mode = data.value("monitor_mode", 0);
+        rule.frequency_seconds = data.value("frequency_seconds", 3600);
+        rule.severity_score_default = data.value("severity_score_default", 3);
+        rule.mitre_attack_mapping = data.value("mitre_attack_mapping", "");
+        rule.apply_global_ip_exclusions = data.value("apply_global_ip_exclusions", true); // Ensure this is parsed
+        rule.execution_device = data.value("execution_device", ""); // Parse new field
+        rule.min_ndr_version = data.value("min_ndr_version", "");   // Parse new field
+        return true;
     }
-    std::cout << std::string(80, '-') << "\n";
-    std::cout << "\nTotal rules loaded: " << loaded_rules.size() << "\n";
+    catch (const std::exception& e) {
+        std::cerr << "Error loading metadata from " << path << ": " << e.what() << std::endl;
+        return false;
+    }
 }
 
 void DetectionManager::RunSingleRule(const LoadedDetectionRule& rule) {
