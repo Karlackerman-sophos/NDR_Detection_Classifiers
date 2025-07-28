@@ -20,6 +20,7 @@ struct LoadedDetectionRule {
     int severity_score_default{ 0 };
     std::string sql_query_template;
     std::string rule_dir_path;
+    bool apply_global_ip_exclusions{ true };
 };
 
 #endif // DETECTION_COMMON_HPP
