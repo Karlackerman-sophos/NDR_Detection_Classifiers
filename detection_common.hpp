@@ -17,6 +17,8 @@ struct LoadedDetectionRule {
     std::string type;
     int frequency_seconds{ 86400 };
     int monitor_mode{ 1 };
+    std::string execution_device;
+    std::string min_ndr_version;
     std::string mitre_attack_mapping;
     int severity_score_default{ 0 };
     std::string sql_query_template;
