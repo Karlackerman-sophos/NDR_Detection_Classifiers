@@ -54,7 +54,7 @@ After a successful build, you can run the test harness directly from Visual Stud
 2.  Select **"Set as Startup Item"**. 
 3.  Press the green **"Play"** button (or `F5`) to run the executable. 
 
-The build process automatically copies the necessary `.dll` files next to the executable, allowing it to run without any manual setup. 
+Ensure all necessary `.dll` files are in the user or system path
 
 ---
 ## Project File Structure
