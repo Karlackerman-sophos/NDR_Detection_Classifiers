@@ -3,6 +3,7 @@
   "name": "Internal Host Recon - IP Protocol Scan",
   "description": "Detects an internal source IP attempting to discover which IP protocols (e.g., TCP, UDP, ICMP, IGMP) are supported by target hosts by sending probes with many different IP protocol numbers.",
   "enabled": true,
+  "type": "Scheduled",
   "frequency_seconds": 3600,
   "monitor_mode": 1,
   "execution_device": "NDR_Sensor",
