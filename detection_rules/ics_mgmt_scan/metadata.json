@@ -3,6 +3,7 @@
   "name": "Internal Host Recon/Compromise - ICS/Management Protocol Scan",
   "description": "Detects scanning or connection attempts targeting highly sensitive Industrial Control System (ICS) or out-of-band management protocols (IPMI, MMS, PROFINET_IO, EtherNet/IP, S7COMM, DNP3, IEC60870). Any activity related to these protocols from non-authorized sources is a critical security concern.",
   "enabled": true,
+  "type": "Scheduled",
   "frequency_seconds": 3600,
   "monitor_mode": 1,
   "execution_device": "NDR_Sensor",
